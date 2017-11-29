@@ -5,13 +5,24 @@ class Book:
         self.book = xlrd.open_workbook(filename="all-euro-data-2016-2017.xls")
 
     def read_sheet(self, championship):
-        sheet = self.book.sheet_by_name(championship)
+        sheet = self._getSheet(championship)
         for i in range(sheet.nrows-1):
             i+=1
             j=0
             for values in sheet.row_values(rowx=i,start_colx=1,end_colx=10):
                 yield values,j,i
                 j+=1
+    def inverse_read_sheet(self, championship):
+        sheet = self._getSheet(championship)
+        for i in range(sheet.nrows-1, 1, -1):
+            j=0
+            for values in sheet.row_values(rowx=i,start_colx=1,end_colx=10):
+                yield  values,j,i
+                j+=1
+
+    def _getSheet(self, championship):
+        return self.book.sheet_by_name(championship)
+
 
     def teams(self, championship):
         n_teams = self.giornate(championship)
@@ -75,18 +86,3 @@ def solve_data(days):
     month = months//30
     day = days - (month*30 + (y*365))
     return day,month,anno
-
-book = Book()
-championship = book.giornate("I1")[0]
-for i in range(len(championship.keys())):
-    i+=1
-    print("\ngiornata",i)
-    for k in range(len(championship["giornata"+str(i)].keys())):
-        k+=1
-        print("Numero Match", k)
-        print(championship["giornata"+str(i)][str(k)+"match"])
-
-
-print("SERIE A 2016/2017")
-for team in book.teams("I1"):
-    print(team)
