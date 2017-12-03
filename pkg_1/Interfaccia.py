@@ -2,10 +2,11 @@ from pkg_1.Championship import *
 
 ### FUNZIONI UTILI PER L'INTERFACCIA ###
 def menuChoice():
-    valid = ['1',]
+    valid = ['1','10',]
     userChoice = str(input("Inserisci il numero dell'operazione che vuoi effettuare: "))
     if userChoice in valid:
         inputCheck(userChoice)
+        menuChoice()
     else:
         print('Siamo spiacenti, questa operazione non è tra quelle elencate... La preghiamo di riprovare.')
         menuChoice()
@@ -22,7 +23,10 @@ def inputCheck(userChoice):
             print(
                 bcolors.BOLD + bcolors.UNDERLINE + bcolors.FAIL + text + bcolors.FAIL + " non è nel nostro database...")
             print("Ricontrolla il codice del campionato inserito" + bcolors.ENDC)
-            exit()
+    if userChoice == '10':
+        print("Ti ringraziamo per aver usufruito del nostro servizio.\nTorna a trovarci.\n")
+        exit()
+
 
 
 ### INTERFACCIA ###
@@ -41,5 +45,6 @@ print("1) Dato un campionato, stampare l’elenco delle squadre del campionato.\
       "reti.\n"
       "9) Dati una giornata e un campionato, stampare la squadra tra tutti i campionati con il maggior numero di"
       "vittorie, la squadra con il maggior numero di vittorie in casa, la quadra con il maggior numero di vittorie in"
-      "trasferta.\n")
+      "trasferta."
+      "10) Uscire dall'applicazione del Centro Scommesse."\n")
 menuChoice()
