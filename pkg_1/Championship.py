@@ -109,17 +109,6 @@ class Championship():
                 yield  values,j,i
                 j+=1
 
-###PROVA###
-print("Inserisci Codice Campionato: ")
-text = input()
-try:
-    camp = Championship(text)
-    print("Numero Squadre", len(camp.teams))
-    print(camp.teams)
-except Exception as e:
-    print(bcolors.BOLD+bcolors.UNDERLINE+bcolors.FAIL+text+bcolors.FAIL+" non è nel nostro database...")
-    print("Ricontrolla il codice del campionato inserito"+ bcolors.ENDC)
-    exit()
 
 
 """
