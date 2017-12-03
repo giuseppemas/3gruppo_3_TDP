@@ -1,41 +1,46 @@
 from pkg_1.Book import *
 
+class bcolors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+
 class Championship():
-
-    class DaySeason():
-        pass
-
 
     def __init__(self, name):
         self.name = name
         self.teams = []
-        self.n_teams = 0
-        self.sheets = Book()
+        self.sheet= Book()._getSheet(self.name)
+        if len(self.teams)==0:
+            self._set_teams_championship()
 
-    def _first_iteration(self):
-        sheet = self.sheets._getSheet(self.name)
-        days = 1
-        n_match = 0
-        giornata = {}
-        giornata["giornata" + str(days)] = {}
-        for k in self.sheets.inverse_read_sheet(self.name):
-            #first iteration
-            if k[1]==0 and k[2] == sheet.nrows-1:
+    def _set_teams_championship(self):
+        """This method set all the team in a championship """
+        for k in self._team_generator():
+            if k[1]==0 and k[2] == self.sheet.nrows-1:
                 lastdate = k[0]
-                n_match += 1
-                giornata["giornata" + str(days)][str(n_match) + "match"] = (int(lastdate), )
-            if k[1]==0 and k[2]<sheet.nrows-1:
+            if k[1]==0 and k[2]<self.sheet.nrows-1:
                 if k[0] >= lastdate-1:
-                    n_match += 1
                     lastdate = k[0]
-                    giornata["giornata" + str(days)][str(n_match) + "match"] = (int(lastdate),)
                 else:
                     return
             if k[1]==1:
-                giornata["giornata"+str(days)][str(n_match)+"match"] += (k[0],)
+                self._setTeam(k[0])
             if k[1]==2:
-                giornata["giornata"+str(days)][str(n_match)+"match"] += (k[0],)
-                self._setTeam(giornata["giornata"+str(days)][str(n_match)+"match"])
+                self._setTeam(k[0])
+
+    def _setTeam(self, match):
+        self.teams.append(match)
+
+
+    def _getTeams(self):
+        return self.teams
+
 
     def _set_day_season(self):
         teams = 0
@@ -44,18 +49,20 @@ class Championship():
         rec = 0
         giornata = {}
         giornata["giornata" + str(days)] = {}
-        for k in self.sheets.read_sheet(self.name):
+        for k in self._read_sheet():
             if k[1] == 0 and k[2] == 1:
                 lastdate = k[0]
+                teams+=2
                 n_match += 1
                 giornata["giornata" + str(days)][str(n_match) + "match"] = None
             if k[1] == 0 and k[2] > 1:
-                if k[0] <= lastdate + 1 and teams <= self.n_teams:
+                if k[0] <= lastdate + 1 and teams <=len(self.teams):
                     n_match += 1
+                    teams+=2
                     giornata["giornata" + str(days)][str(n_match) + "match"] = None
                     lastdate = k[0]
                 else:
-                    if len(giornata["giornata" + str(days)])<self.n_teams//4:
+                    if len(giornata["giornata" + str(days)])<len(self.teams)//4:
                         rec+=1
                         giornata["giornata" + "recuperata"+str(rec)] = {}
                         for l in range(len(giornata["giornata" + str(days)].values())):
@@ -70,12 +77,11 @@ class Championship():
                         days += 1
                         giornata["giornata" + str(days)] = {}
                         lastdate = k[0]
+
             if k[1] == 1:
                 giornata["giornata" + str(days)][str(n_match) + "match"] = (k[0],)
-                teams+=1
             if k[1] == 2:
                 giornata["giornata" + str(days)][str(n_match) + "match"] += (k[0],)
-                teams+=1
             if k[1] == 3:
                 giornata["giornata" + str(days)][str(n_match) + "match"] += (int(k[0]),)
             if k[1] == 4:
@@ -87,26 +93,36 @@ class Championship():
 
         return giornata
 
-    def _setTeam(self,match):
-        self.teams.append(match[1])
-        self.teams.append(match[2])
-        self.n_teams +=2
+    def _read_sheet(self):
+        for i in range(self.sheet.nrows - 1):
+            i += 1
+            j = 0
+            for values in self.sheet.row_values(rowx=i, start_colx=1, end_colx=10):
+                yield values, j, i
+                j += 1
 
 
-
-    def _getTeams(self):
-        return self.teams
-
+    def _team_generator(self):
+        for i in range(self.sheet.nrows-1, 1, -1):
+            j=0
+            for values in self.sheet.row_values(rowx=i,start_colx=1,end_colx=4):
+                yield  values,j,i
+                j+=1
 
 ###PROVA###
-print("PROVA")
-camp = Championship("N1")
+print("Inserisci Codice Campionato: ")
+text = input()
+try:
+    camp = Championship(text)
+    print("Numero Squadre", len(camp.teams))
+    print(camp.teams)
+except Exception as e:
+    print(bcolors.BOLD+bcolors.UNDERLINE+bcolors.FAIL+text+bcolors.FAIL+" non è nel nostro database...")
+    print("Ricontrolla il codice del campionato inserito"+ bcolors.ENDC)
+    exit()
 
-print("Squadre")
-camp._first_iteration()
-print(camp.teams)
-print("Numero Squadre",camp.n_teams)
 
+"""
 giornata =camp._set_day_season()
 rec = 0
 for i in range(len(giornata.keys())):
@@ -122,5 +138,7 @@ for i in range(len(giornata.keys())):
         print("\n")
         for j in range(len(giornata["giornata" + "recuperata"+str(rec)])):
             j+=1
-            print("partita recuperata")
+            print("partita recuperata", rec)
             print(giornata["giornata" + "recuperata"+str(rec)][str(j) + "match"])
+
+"""
