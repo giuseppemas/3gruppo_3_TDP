@@ -23,6 +23,7 @@ def inputCheck(userChoice):
             print(
                 bcolors.BOLD + bcolors.UNDERLINE + bcolors.FAIL + text + bcolors.FAIL + " non è nel nostro database...")
             print("Ricontrolla il codice del campionato inserito" + bcolors.ENDC)
+
     if userChoice == '10':
         print("Ti ringraziamo per aver usufruito del nostro servizio.\nTorna a trovarci.\n")
         exit()
@@ -46,5 +47,5 @@ print("1) Dato un campionato, stampare l’elenco delle squadre del campionato.\
       "9) Dati una giornata e un campionato, stampare la squadra tra tutti i campionati con il maggior numero di"
       "vittorie, la squadra con il maggior numero di vittorie in casa, la quadra con il maggior numero di vittorie in"
       "trasferta."
-      "10) Uscire dall'applicazione del Centro Scommesse."\n")
+      "10) Uscire dall'applicazione del Centro Scommesse.\n")
 menuChoice()
