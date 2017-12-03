@@ -45,7 +45,7 @@ print("1) Dato un campionato, stampare l’elenco delle squadre del campionato.\
       "8) Dati una giornata e un intero k, stampare le k squadre tra tutti i campionati con la migliore differenza"
       "reti.\n"
       "9) Dati una giornata e un campionato, stampare la squadra tra tutti i campionati con il maggior numero di"
-      "vittorie, la squadra con il maggior numero di vittorie in casa, la quadra con il maggior numero di vittorie in"
-      "trasferta."
+      "vittorie, la squadra con il maggior numero di vittorie in casa, la squadra con il maggior numero di vittorie in"
+      "trasferta.\n"
       "10) Uscire dall'applicazione del Centro Scommesse.\n")
 menuChoice()
