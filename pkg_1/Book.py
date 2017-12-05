@@ -12,3 +12,5 @@ class Book:
 ###########
 def solve_data(days):
     return datetime.date(1900,1,1)+datetime.timedelta(days)
+
+print(solve_data(42812))
