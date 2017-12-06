@@ -60,7 +60,7 @@ class Championship(SortedTableMap):
         rec = len(self.teams)*2-2
         self[days] = self.DayofSeason()
         for k in self._read_sheet():
-            if k[1] == 0 and k[2] == 1:  #k[1] column index, k[2] row index
+            if k[1] == 0 and k[2] == 1:  #k[0] value, k[1] column index, k[2] row index
                 lastdate = k[0]
                 n_match += 1
                 self[days][n_match] = []
@@ -77,7 +77,6 @@ class Championship(SortedTableMap):
                         for l in range(len(self[days])):
                             l += 1
                             self[rec][l] = self[days][l]
-                            self[rec][l] += [True,True]
                         teams = 0
                         n_match = 1
                         lastdate = k[0]
@@ -92,16 +91,20 @@ class Championship(SortedTableMap):
                         lastdate = k[0]
             #print("days", days, "n_match", n_match)
             if k[1]==0:
-                self[days][n_match] = [k[0]]
+                self[days][n_match] = [int(k[0])]
             elif k[1]==8:
                 self[days][n_match] += [k[0]]
                 teams+=2
-                self._set_partialranking(days,n_match)
+                self._set_partialranking(days,n_match,nextday)
                 self._set_ranking(days,n_match, nextday)
             else:
-                self[days][n_match] += [k[0]]
+                if type(k[0])!=type(""):
+                    self[days][n_match] += [int(k[0])]
+                else:
+                    self[days][n_match] += [k[0]]
 
     def get_rankingday(self,day):
+        self.sort_rank(day)
         return self[day]._ranking
 
     def get_ranking(self):
@@ -116,14 +119,14 @@ class Championship(SortedTableMap):
     def _set_ranking(self, day, match, nextday):
         if day-1==0:
             if self[day][match][5]=='H':
-                self[day]._ranking.append([self[day][match][1], 1, 3])
-                self[day]._ranking.append([self[day][match][2], 1, 0])
+                self[day]._ranking.append([self[day][match][1], 1, 3, self[day][match][3]])
+                self[day]._ranking.append([self[day][match][2], 1, 0, self[day][match][4]])
             elif self[day][match][5]=='D':
-                self[day]._ranking.append([self[day][match][1], 1, 1])
-                self[day]._ranking.append([self[day][match][2], 1, 1])
+                self[day]._ranking.append([self[day][match][1], 1, 1, self[day][match][3]])
+                self[day]._ranking.append([self[day][match][2], 1, 1, self[day][match][4]])
             else:
-                self[day]._ranking.append([self[day][match][1], 1, 0])
-                self[day]._ranking.append([self[day][match][2], 1, 3])
+                self[day]._ranking.append([self[day][match][1], 1, 0, self[day][match][3]])
+                self[day]._ranking.append([self[day][match][2], 1, 3, self[day][match][4]])
         else:
             if nextday:
                 #print("LEN",len(self[day]._ranking), "Day", day)
@@ -135,9 +138,11 @@ class Championship(SortedTableMap):
                     if elem[0] == self[day][match][1]:
                         elem[1]+=1
                         elem[2]+=3
+                        elem[3]+=self[day][match][3]
                         self[day]._ranking[i]=elem
                     if elem[0] == self[day][match][2]:
                         elem[1]+=1
+                        elem[3] += self[day][match][4]
                         self[day]._ranking[i] = elem
                     i+=1
             elif self[day][match][5] == 'D':
@@ -146,10 +151,12 @@ class Championship(SortedTableMap):
                     if elem[0] == self[day][match][1]:
                         elem[1] += 1
                         elem[2] += 1
+                        elem[3] += self[day][match][3]
                         self[day]._ranking[i] = elem
                     if elem[0] == self[day][match][2]:
                         elem[1] += 1
                         elem[2] += 1
+                        elem[3] += self[day][match][4]
                         self[day]._ranking[i] = elem
                     i += 1
             else:
@@ -157,60 +164,110 @@ class Championship(SortedTableMap):
                 for elem in self[day]._ranking:
                     if elem[0] == self[day][match][1]:
                         elem[1] += 1
+                        elem[3] += self[day][match][3]
                         self[day]._ranking[i] = elem
                     if elem[0] == self[day][match][2]:
                         elem[1] += 1
                         elem[2] += 3
+                        elem[3] += self[day][match][4]
                         self[day]._ranking[i] = elem
                     i += 1
 
-    def _set_partialranking(self,day, match):
-        pass
+    def _set_partialranking(self,day, match,nextday):
+        if day-1==0:
+            if self[day][match][8]=='H':
+                self[day]._partialrank.append([self[day][match][1], 1, 3, self[day][match][6]])
+                self[day]._partialrank.append([self[day][match][2], 1, 0, self[day][match][7]])
+            elif self[day][match][8]=='D':
+                self[day]._partialrank.append([self[day][match][1], 1, 1, self[day][match][6]])
+                self[day]._partialrank.append([self[day][match][2], 1, 1, self[day][match][7]])
+            else:
+                self[day]._partialrank.append([self[day][match][1], 1, 0, self[day][match][6]])
+                self[day]._partialrank.append([self[day][match][2], 1, 3, self[day][match][7]])
+        else:
+            if nextday:
+                #print("LEN",len(self[day]._partialrank), "Day", day)
+                if len(self[day]._partialrank)==0:
+                    self[day]._partialrank = copy.deepcopy(self[day-1]._partialrank)
+            if self[day][match][8] == 'H':
+                i=0
+                for elem in self[day]._partialrank:
+                    if elem[0] == self[day][match][1]:
+                        elem[1]+=1
+                        elem[2]+=3
+                        elem[3] += self[day][match][6]
+                        self[day]._partialrank[i]=elem
+                    if elem[0] == self[day][match][2]:
+                        elem[1]+=1
+                        elem[3] += self[day][match][7]
+                        self[day]._partialrank[i] = elem
+                    i+=1
+            elif self[day][match][8] == 'D':
+                i = 0
+                for elem in self[day]._partialrank:
+                    if elem[0] == self[day][match][1]:
+                        elem[1] += 1
+                        elem[2] += 1
+                        elem[3] += self[day][match][6]
+                        self[day]._partialrank[i] = elem
+                    if elem[0] == self[day][match][2]:
+                        elem[1] += 1
+                        elem[2] += 1
+                        elem[3] += self[day][match][7]
+                        self[day]._partialrank[i] = elem
+                    i += 1
+            else:
+                i = 0
+                for elem in self[day]._partialrank:
+                    if elem[0] == self[day][match][1]:
+                        elem[1] += 1
+                        elem[3] += self[day][match][6]
+                        self[day]._partialrank[i] = elem
+                    if elem[0] == self[day][match][2]:
+                        elem[1] += 1
+                        elem[2] += 3
+                        elem[3] += self[day][match][7]
+                        self[day]._partialrank[i] = elem
+                    i += 1
 
-    def _checkmatchpostponed(self,day,match):
-        for i in range(len(self.teams)*2-1,len(self)+1):
-            for k in self[i]:
-                if self[i][k][9]:
-                    if self[i][k][0] < self[day][match][0]:
-                        if self[i][k][5] == 'H':
-                            t = 0
-                            for elem in self[day]._ranking:
-                                if elem[0] == self[i][k][1]:
-                                    elem[1] += 1
-                                    elem[2] += 3
-                                    self[day]._ranking[t] = elem
-                                if elem[0] == self[i][k][2]:
-                                    elem[1] += 1
-                                    self[day]._ranking[t] = elem
-                                t += 1
-                            self[i][k][9] = False
-                        elif self[day][match][5] == 'D':
-                            t = 0
-                            for elem in self[day]._ranking:
-                                if elem[0] == self[i][k][1]:
-                                    elem[1] += 1
-                                    elem[2] += 1
-                                    self[day]._ranking[t] = elem
-                                if elem[0] == self[i][k][2]:
-                                    elem[1] += 1
-                                    elem[2] += 1
-                                    self[day]._ranking[t] = elem
-                                t += 1
-                            self[i][k][9] = False
-                        else:
-                            t = 0
-                            for elem in self[day]._ranking:
-                                if elem[0] == self[i][k][1]:
-                                    elem[1] += 1
-                                    self[day]._ranking[t] = elem
-                                if elem[0] == self[i][k][2]:
-                                    elem[1] += 1
-                                    elem[2] += 3
-                                    self[day]._ranking[t] = elem
-                                t += 1
-                            self[i][k][9] = False
-                    else:
-                        return
+    def sort_rank(self, day):
+        self[day]._ranking._quickSortHelper(0, len(self[day]._ranking)-1)
+
+
+    def _quickSortHelper(self, first, last):
+        if first < last:
+            splitpoint = self._partition(first, last)
+
+            self._quickSortHelper(first, splitpoint - 1)
+            self._quickSortHelper( splitpoint + 1, last)
+
+    def _partition(self, first, last):
+        pivotvalue = self[first]
+
+        leftmark = first + 1
+        rightmark = last
+
+        done = False
+        while not done:
+
+            while leftmark <= rightmark and self[leftmark] <= pivotvalue:
+                leftmark = leftmark + 1
+
+            while self[rightmark] >= pivotvalue and rightmark >= leftmark:
+                rightmark = rightmark - 1
+
+            if rightmark < leftmark:
+                done = True
+            else:
+                temp = self[leftmark]
+                self[leftmark] = self[rightmark]
+                self[rightmark] = temp
+
+        temp = self[first]
+        self[first] = self[rightmark]
+        self[rightmark] = temp
+
+        return rightmark
 
     def _read_sheet(self):
         for i in range(self.sheet.nrows - 1):
@@ -247,6 +304,10 @@ for day in camp:
 
 print("Inserisci giornata")
 day = input()
-
+print("RANK")
+print("Team | MP | Score | G")
 for team in camp[int(day)]._ranking:
+    print(team)
+print("Partial Rank")
+for team in camp[int(day)]._partialrank:
     print(team)
