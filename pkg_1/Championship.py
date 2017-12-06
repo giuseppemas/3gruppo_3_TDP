@@ -47,7 +47,6 @@ class Championship(SortedTableMap):
 
     def __init__(self,name):
         super().__init__()
-        print(name)
         self.name = name
         self.teams = []
         self.sheet = Book()._getSheet(self.name)
@@ -153,9 +152,12 @@ class Championship(SortedTableMap):
                 self[day]._ranking.append([self[day][match][2], 1, 3, self[day][match][4]])
         else:
             if nextday:
-                #print("LEN",len(self[day]._ranking), "Day", day)
                 if len(self[day]._ranking)==0:
                     self[day]._ranking = copy.deepcopy(self[day-1]._ranking)
+                #print(self[day]._ranking)
+
+            #print("LEN", len(self[day]._ranking), "Day", day)
+
             if self[day][match][5] == 'H':
                 i=0
                 for elem in self[day]._ranking:
@@ -183,7 +185,7 @@ class Championship(SortedTableMap):
                         elem[3] += self[day][match][4]
                         self[day]._ranking[i] = elem
                     i += 1
-            elif self[day][match][8] == 'A':
+            elif self[day][match][5] == 'A':
                 i = 0
                 for elem in self[day]._ranking:
                     if elem[0] == self[day][match][1]:
@@ -315,10 +317,12 @@ def choicecamp(text, listaCampionati):
         if item._key==text:
             camp = item._value
             return camp
+
+"""
 text = str(input("Inserisci Codice Campionato: "))
-data = DataList()
-#camp = Championship(text)
-camp = data[text]
+#data = DataList()
+camp = Championship(text)
+#camp = data[text]
 print("Numero Squadre", len(camp.teams))
 print(camp.teams)
 for day in camp:
@@ -329,12 +333,15 @@ for day in camp:
     for match in camp[day]:
         print("match", match, "Dati Partita: ", camp[day][match])
 
-print("Inserisci giornata")
-day = input()
-print("RANK")
-print("Team | MP | Score | G")
-for team in camp[int(day)]._ranking:
-    print(team)
-print("Partial Rank")
-for team in camp[int(day)]._partialrank:
-    print(team)
+while True:
+    print("Inserisci giornata")
+    day = input()
+    print("RANK")
+    print("Team | MP | Score | G")
+    for team in camp[int(day)]._ranking:
+        print(team)
+    print("Partial Rank")
+    for team in camp[int(day)]._partialrank:
+        print(team)
+
+"""

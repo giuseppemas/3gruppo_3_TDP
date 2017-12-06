@@ -1,4 +1,7 @@
 from pkg_1.Championship import *
+import threading
+import time
+import sys
 
 class bcolors:
     HEADER = '\033[95m'
@@ -11,38 +14,117 @@ class bcolors:
     UNDERLINE = '\033[4m'
 
 ### FUNZIONI UTILI PER L'INTERFACCIA ###
-def menuChoice():
-    valid = ['1','10',]
-    userChoice = str(input("Inserisci il numero dell'operazione che vuoi effettuare: "))
+def menuChoice(data):
+    valid = ['1', '2', '3', '10',]
+    userChoice = str(input(bcolors.OKBLUE+bcolors.BOLD+"\nInserisci il numero dell'operazione che vuoi effettuare: " + bcolors.ENDC))
     if userChoice in valid:
-        inputCheck(userChoice)
-        menuChoice()
+        inputCheck(userChoice,data)
+        menuChoice(data)
     else:
-        print(bcolors.WARNING+bcolors.BOLD+'Siamo spiacenti, questa operazione non è tra quelle elencate... La preghiamo di riprovare.'+bcolors.ENDC)
-        menuChoice()
+        print(bcolors.FAIL+bcolors.BOLD+'Siamo spiacenti, questa operazione non è tra quelle elencate... La preghiamo di riprovare.'+bcolors.ENDC)
+        print("\nOperazioni disponibili: ")
+        print("1) Dato un campionato, stampare l’elenco delle squadre del campionato.\n"
+              "2) Dati una giornata e un campionato, stampare la classifica per la giornata indicata e per ogni squadra il numero di partite giocate.\n"
+              "3) Dati una giornata e un campionato, stampare la classifica per la giornata indicata considerando i risultati"
+              " che si riferiscono al primo tempo e per ogni squadra il numero di partite giocate.\n"
+              "4) Date una giornata e una squadra, stampare gli ultimi cinque risultati per la squadra indicata.\n"
+              "5) Dato un giorno, stampare i risultati di tutte le eventuali partite giocate il giorno indicato.\n"
+              "6) Dati una giornata e un intero k, stampare le k squadre tra tutti i campionati che hanno segnato più goal.\n"
+              "7) Dati una giornata e un intero k, stampare le k squadre tra tutti i campionati che hanno subito meno goal.\n"
+              "8) Dati una giornata e un intero k, stampare le k squadre tra tutti i campionati con la migliore differenza"
+              "reti.\n"
+              "9) Dati una giornata e un campionato, stampare la squadra tra tutti i campionati con il maggior numero di"
+              "vittorie, la squadra con il maggior numero di vittorie in casa, la squadra con il maggior numero di vittorie in"
+              "trasferta.\n"
+              "10) Uscire dall'applicazione del Centro Scommesse.\n")
+        menuChoice(data)
 
 
-def inputCheck(userChoice):
+def inputCheck(userChoice ,data):
     if userChoice == '1':
-        text = str(input("Inserisci Codice Campionato: "))
+        print("Campionati: E0, SC0, D1, SP1, I1, F1, N1, B1, P1, T1, G1")
+        text = str(input(bcolors.OKBLUE+bcolors.BOLD+"\nInserisci Codice Campionato: "+ bcolors.ENDC))
         try:
-            camp = Championship(text)
+            camp = data[text]
             print("Numero Squadre", len(camp.teams))
             print(camp.teams)
         except Exception as e:
-            print(
-                bcolors.BOLD + bcolors.UNDERLINE + bcolors.FAIL + text + bcolors.FAIL + " non è nel nostro database...")
+            print(bcolors.BOLD + bcolors.UNDERLINE + bcolors.FAIL + text + bcolors.FAIL + " non è nel nostro database...")
+            print("Ricontrolla il codice del campionato inserito" + bcolors.ENDC)
+
+    if userChoice == '2':
+        text = str(input(bcolors.OKBLUE+bcolors.BOLD+"\nInserisci Codice Campionato: "+ bcolors.ENDC))
+        text2 = str(input(bcolors.OKBLUE+bcolors.BOLD+"Inserisci Giornata: "+ bcolors.ENDC))
+        try:
+            camp = data[text]
+            print("Classifica")
+            print("Teams | Match Played | Score | Goal")
+            for team in camp[int(text2)]._ranking:
+                print(team)
+        except Exception as e:
+            print(bcolors.BOLD + bcolors.UNDERLINE + bcolors.FAIL + text + bcolors.FAIL + " non è nel nostro database...")
+            print("Ricontrolla il codice del campionato inserito" + bcolors.ENDC)
+
+    if userChoice == '3':
+        text = str(input(bcolors.OKBLUE+bcolors.BOLD+"\nInserisci Codice Campionato: "+ bcolors.ENDC))
+        text2 = str(input(bcolors.OKBLUE+bcolors.BOLD+"Inserisci Giornata: "+ bcolors.ENDC))
+        try:
+            camp = data[text]
+            print("Classifica basata sui risultati del primo tempo")
+            print("Teams | Match Played | Score | Goal")
+            for team in camp[int(text2)]._partialrank:
+                print(team)
+        except Exception as e:
+            print(bcolors.BOLD + bcolors.UNDERLINE + bcolors.FAIL + text + bcolors.FAIL + " non è nel nostro database...")
             print("Ricontrolla il codice del campionato inserito" + bcolors.ENDC)
 
     if userChoice == '10':
-        print("Ti ringraziamo per aver usufruito del nostro servizio.\nTorna a trovarci.\n")
+        print(bcolors.OKBLUE+bcolors.BOLD+"\nTi ringraziamo per aver usufruito del nostro servizio.\nTorna a trovarci.\n" + bcolors.ENDC)
         exit()
 
+def caricamentoDatabase():
+    text = "Caricamento"
+    temp = ""
+    for i in range(3):
+        sys.stdout.write(".")
+        sys.stdout.flush()
+        time.sleep(0.2)
+        sys.stdout.write(".")
+        sys.stdout.flush()
+        time.sleep(0.2)
+        sys.stdout.write("|")
+        sys.stdout.flush()
+        time.sleep(0.2)
+        sys.stdout.write('{0}\r'.format("../"))
+        #sys.stdout.write("/")
+        for i in range(len(text)):
+            temp += text[i]
+            sys.stdout.flush()
+            sys.stdout.write('{0}'.format(".."+temp))
+            sys.stdout.flush()
+            time.sleep(0.2)
+            sys.stdout.write('{0}'.format("|"))
+            sys.stdout.flush()
+            time.sleep(0.2)
+            sys.stdout.write('{0}\r'.format(""))
+            sys.stdout.flush()
+            time.sleep(0.1)
+        temp=""
 
+
+threadingLock = threading.Lock()
+
+class MyThread(threading.Thread):
+    def __init__(self):
+        threading.Thread.__init__(self)
+    def run(self):
+        threadingLock.acquire()
+        caricamentoDatabase()
+        threadingLock.release()
 
 ### INTERFACCIA ###
 print("*** Benvenuto nel nostro Centro Scommesse ***\n")
-print("Operazioni possibili: ")
+print("Operazioni disponibili: ")
 print("1) Dato un campionato, stampare l’elenco delle squadre del campionato.\n"
       "2) Dati una giornata e un campionato, stampare la classifica per la giornata indicata e per ogni squadra il"
       "numero di partite giocate.\n"
@@ -58,4 +140,8 @@ print("1) Dato un campionato, stampare l’elenco delle squadre del campionato.\
       "vittorie, la squadra con il maggior numero di vittorie in casa, la squadra con il maggior numero di vittorie in"
       "trasferta.\n"
       "10) Uscire dall'applicazione del Centro Scommesse.\n")
-menuChoice()
+
+thread1 = MyThread()
+thread1.start()
+data = DataList()
+menuChoice(data)
