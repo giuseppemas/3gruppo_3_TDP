@@ -6,11 +6,34 @@ from  TdP_collections.hash_table.sorted_table_map import SortedTableMap, MapBase
 class DataList(MapBase):
     def __init__(self):
         self._listChampionships = []
+        if len(self._listChampionships)==0:
+            self._setList()
 
     def _setList(self):
         names = ["E0","SC0","D1","SP1","I1","F1","N1","B1","P1","T1","G1"]
         for value in names:
             self._listChampionships.append(self._Item(value,Championship(value)))
+
+    def __len__(self):
+        return len(self._listChampionships)
+
+    def __iter__(self):
+        return self._listChampionships.__iter__()
+
+    def __getitem__(self, item):
+        for k in self._listChampionships:
+            if k._key == item:
+                return k._value
+
+    def __setitem__(self, key, value):
+        for k in self._listChampionships:
+            if k._key == key:
+                k._value=value
+
+    def __delitem__(self, key):
+        for k in self._listChampionships:
+            if k._key == key:
+                del k
 
 class Championship(SortedTableMap):
     """Class contains Days of season and Matches postponed"""
@@ -24,6 +47,7 @@ class Championship(SortedTableMap):
 
     def __init__(self,name):
         super().__init__()
+        print(name)
         self.name = name
         self.teams = []
         self.sheet = Book()._getSheet(self.name)
@@ -159,7 +183,7 @@ class Championship(SortedTableMap):
                         elem[3] += self[day][match][4]
                         self[day]._ranking[i] = elem
                     i += 1
-            else:
+            elif self[day][match][8] == 'A':
                 i = 0
                 for elem in self[day]._ranking:
                     if elem[0] == self[day][match][1]:
@@ -216,11 +240,13 @@ class Championship(SortedTableMap):
                         elem[3] += self[day][match][7]
                         self[day]._partialrank[i] = elem
                     i += 1
-            else:
+            elif self[day][match][8] == 'A': #Special Case: Bastia-Lyon 16/04/17=42841 33°giornata 8° partita sann chiavat a mazzat partita interrotta
                 i = 0
                 for elem in self[day]._partialrank:
                     if elem[0] == self[day][match][1]:
                         elem[1] += 1
+                        #print("Eccolo",day, match, self[day][match][6], type(self[day][match][6]))
+                        #print("Eccolo2", elem[3], type(elem[3]))
                         elem[3] += self[day][match][6]
                         self[day]._partialrank[i] = elem
                     if elem[0] == self[day][match][2]:
@@ -290,8 +316,9 @@ def choicecamp(text, listaCampionati):
             camp = item._value
             return camp
 text = str(input("Inserisci Codice Campionato: "))
-
-camp = Championship(text)
+data = DataList()
+#camp = Championship(text)
+camp = data[text]
 print("Numero Squadre", len(camp.teams))
 print(camp.teams)
 for day in camp:

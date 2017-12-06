@@ -18,7 +18,7 @@ def menuChoice():
         inputCheck(userChoice)
         menuChoice()
     else:
-        print('Siamo spiacenti, questa operazione non è tra quelle elencate... La preghiamo di riprovare.')
+        print(bcolors.WARNING+bcolors.BOLD+'Siamo spiacenti, questa operazione non è tra quelle elencate... La preghiamo di riprovare.'+bcolors.ENDC)
         menuChoice()
 
 
