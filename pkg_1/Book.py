@@ -10,5 +10,5 @@ class Book:
 
 
 ###########
-def solve_data(days):
-    return datetime.date(1900,1,1)+datetime.timedelta(days)
+def daysToDate(days):
+    return datetime.date(1899,12,30) + datetime.timedelta(days)

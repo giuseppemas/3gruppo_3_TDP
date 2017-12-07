@@ -15,7 +15,7 @@ class bcolors:
 
 ### FUNZIONI UTILI PER L'INTERFACCIA ###
 def menuChoice(data):
-    valid = ['1', '2', '3', '4', '10',]
+    valid = ['1', '2', '3', '4','5', '10',]
     userChoice = str(input(bcolors.OKBLUE+bcolors.BOLD+"\nInserisci il numero dell'operazione che vuoi effettuare: " + bcolors.ENDC))
     if userChoice in valid:
         inputCheck(userChoice,data)
@@ -41,9 +41,10 @@ def menuChoice(data):
 
 
 def inputCheck(userChoice ,data):
+    print("Campionati: E0, SC0, D1, SP1, I1, F1, N1, B1, P1, T1, G1")
     if userChoice == '1':
-        print("Campionati: E0, SC0, D1, SP1, I1, F1, N1, B1, P1, T1, G1")
         text = str(input(bcolors.OKBLUE+bcolors.BOLD+"\nInserisci Codice Campionato: "+ bcolors.ENDC))
+        text = text.upper()
         try:
             camp = data[text]
             print("Numero Squadre", len(camp.teams))
@@ -54,6 +55,7 @@ def inputCheck(userChoice ,data):
 
     if userChoice == '2':
         text = str(input(bcolors.OKBLUE+bcolors.BOLD+"\nInserisci Codice Campionato: "+ bcolors.ENDC))
+        text = text.upper()
         text2 = int(input(bcolors.OKBLUE+bcolors.BOLD+"Inserisci Giornata: "+ bcolors.ENDC))
         try:
             camp = data[text]
@@ -67,6 +69,7 @@ def inputCheck(userChoice ,data):
 
     if userChoice == '3':
         text = str(input(bcolors.OKBLUE+bcolors.BOLD+"\nInserisci Codice Campionato: "+ bcolors.ENDC))
+        text = text.upper()
         text2 = int(input(bcolors.OKBLUE+bcolors.BOLD+"Inserisci Giornata: "+ bcolors.ENDC))
         try:
             camp = data[text]
@@ -80,20 +83,44 @@ def inputCheck(userChoice ,data):
 
     if userChoice == '4':
         text = str(input(bcolors.OKBLUE+bcolors.BOLD+"\nInserisci Codice Campionato: "+ bcolors.ENDC))
+        text = text.upper()
         text2 = int(input(bcolors.OKBLUE+bcolors.BOLD+"Inserisci Giornata: "+ bcolors.ENDC))
         text3 = str(input(bcolors.OKBLUE + bcolors.BOLD + "Inserisci Squadra: " + bcolors.ENDC))
         team = text3.capitalize()
-        print(team)
         try:
             camp = data[text]
-            print("Last 5 matches")
+            print("Last 5 matches to day",text2)
             history = camp.get_historyTeam(text2, team)
-            print(team, history)
-
+            print(team, end= " ")
+            for elem in history:
+                if elem == 'W':
+                    print(bcolors.OKGREEN+elem, end=" ")
+                elif elem =='A':
+                    print(bcolors.FAIL+elem, end=" ")
+                elif elem == 'D':
+                    print(bcolors.ENDC+elem, end=" ")
         except Exception as e:
             print(e, e.with_traceback(tb=None))
             print(bcolors.BOLD + bcolors.UNDERLINE + bcolors.FAIL + text + bcolors.FAIL + " non è nel nostro database...")
             print("Ricontrolla il codice del campionato inserito" + bcolors.ENDC)
+    if userChoice == '5':
+        try:
+            text = str(input(bcolors.OKBLUE + bcolors.BOLD + "\nInserisci Codice Campionato: " + bcolors.ENDC))
+            text = text.upper()
+            date = input(bcolors.OKBLUE+"Inserisci Data yyyy-mm-dd: "+ bcolors.ENDC)
+            camp = data[text]
+            matches = camp.getMatches(date)
+            if matches is -1:
+                print(bcolors.BOLD+bcolors.WARNING+"Nessuna partita giocata in questa data"+bcolors.ENDC)
+            else:
+                for elem in matches:
+                    print(elem)
+        except TypeError as e:
+            print(e, e.with_traceback(sys.exc_info()), bcolors.FAIL+"The insert date is not correct"+bcolors.ENDC)
+        except Exception:
+            print(bcolors.BOLD + bcolors.UNDERLINE + bcolors.FAIL + text + bcolors.FAIL + " non è nel nostro database...")
+            print("Ricontrolla il codice del campionato inserito" + bcolors.ENDC)
+
     if userChoice == '10':
         print(bcolors.OKBLUE+bcolors.BOLD+"\nTi ringraziamo per aver usufruito del nostro servizio.\nTorna a trovarci.\n" + bcolors.ENDC)
         exit()

@@ -1,6 +1,8 @@
 from pkg_1.Book import *
 import copy
+import datetime
 from  TdP_collections.hash_table.sorted_table_map import SortedTableMap, MapBase
+
 
 
 class DataList(MapBase):
@@ -114,7 +116,8 @@ class Championship(SortedTableMap):
                         lastdate = k[0]
             #print("days", days, "n_match", n_match)
             if k[1]==0:
-                self[days][n_match] = [int(k[0])]
+                #print(type(self._daysToDate(k[0])), self._daysToDate(k[0]))
+                self[days][n_match] = [self._daysToDate(int(k[0]))]
             elif k[1]==8:
                 self[days][n_match] += [k[0]]
                 teams+=2
@@ -274,6 +277,30 @@ class Championship(SortedTableMap):
                         self[day]._partialrank[i] = elem
                     i += 1
 
+    def getMatches(self, date):
+        date = date.split("-")
+        if len(date) is not 3:
+            raise TypeError
+        else:
+            date = datetime.date(int(date[0]), int(date[1]), int(date[2]))
+            return self._searchDay(date, 1, len(self))
+
+    def _searchDay(self, date, start, end):
+        matches = []
+        if (start > end or start < 1 or end < 1):
+            return -1
+        middle = (start + end)//2
+        if (date < self[middle][1][0]):
+            return self._searchDay(date, start, middle - 1)
+        if (date >= self[middle][1][0]):
+            for match in self[middle]:
+                if self[middle][match][0]==date:
+                    matches+=[self[middle][match]]
+            if len(matches) == 0:
+                return self._searchDay(date, middle + 1, end)
+            else:
+                return matches
+
     def _read_sheet(self):
         for i in range(self.sheet.nrows - 1):
             i += 1
@@ -289,11 +316,8 @@ class Championship(SortedTableMap):
                 yield  values,j,i
                 j+=1
 
-def choicecamp(text, listaCampionati):
-    for item in listaCampionati:
-        if item._key==text:
-            camp = item._value
-            return camp
+    def _daysToDate(self, days):
+        return datetime.date(1899, 12, 30) + datetime.timedelta(days)
 
 """
 text = str(input("Inserisci Codice Campionato: "))
@@ -301,6 +325,7 @@ text = str(input("Inserisci Codice Campionato: "))
 camp = Championship(text)
 #camp = data[text]
 print("Numero Squadre", len(camp.teams))
+print(len(camp))
 print(camp.teams)
 for day in camp:
     if day <= len(camp.teams)*2-2:
@@ -309,7 +334,8 @@ for day in camp:
         print("Partita Rinviata", day-(len(camp.teams)*2-2))
     for match in camp[day]:
         print("match", match, "Dati Partita: ", camp[day][match])
-
+"""
+"""
 while True:
     print("Inserisci giornata")
     day = input()
@@ -322,3 +348,4 @@ while True:
         print(team)
 
 """
+
