@@ -118,6 +118,7 @@ class Championship(SortedTableMap):
                                 self[rec][l] = self[days][l]
                                 temp[l]=self[days][l]
                             toCheck = True
+                            self._checkBeforeDay(days, rec)
                         teams = 0
                         n_match = 1
                         lastdate = k[0]
@@ -140,8 +141,9 @@ class Championship(SortedTableMap):
                 self._set_ranking(days,n_match, nextday)
                 if toCheck:
                     isMatched=self._checkDay(days,n_match, rec, temp)
+                    print(isMatched, days)
                     if not isMatched and nextday and len(temp)>=len(self.teams)//4:
-                        print("in if")
+                        #print("in if")
                         for i in temp:
                             self[days][i] = temp[i]
                         n_match = 1
@@ -150,9 +152,8 @@ class Championship(SortedTableMap):
                         self[days] = self.DayofSeason()
                         self[days][n_match] = ()
                         temp = self.DayofSeason()
-                        print("End", len(temp))
+                        #print("End", len(temp))
                         toCheck = False
-
                     elif isMatched:
                         temp = self.DayofSeason()
                         toCheck = False
@@ -167,16 +168,24 @@ class Championship(SortedTableMap):
         for i in self[rec]:
             if self[rec][i][1]==self[days][n_match][1] or self[rec][i][1]==self[days][n_match][2] or self[rec][i][2]==self[days][n_match][1] or self[rec][i][2]==self[days][n_match][2]:
                 temp = self.DayofSeason()
-                print(len(temp))
+                #print(len(temp))
                 return True
             else:
                 temp[len(temp)+1] = self[days][n_match]
-                for i in temp:
-                    print(temp[i])
-                print(len(temp),"len temp")
                 return False
 
-
+    def _checkBeforeDay(self, day, rec):
+        if len(self[day-1]) == len(self.teams)//2:
+            return
+        else:
+            for i in self[day-1]:
+                if self[rec][1][1] == self[day-1][i][1] or self[rec][1][1] == self[day-1][i][2] or self[rec][1][2] == self[day-1][i][1] or self[rec][1][2] == self[day-1][i][2]:
+                    return
+            self[day-1][len(self[day-1])+1]=self[rec][1]
+            for k in self[rec]:
+                if k<len(self[rec]):
+                    self[rec][k]= self[rec][k+1]
+            del self[rec][len(self[rec])]
 
     def get_rankingday(self,day):
         return self[day]._ranking
