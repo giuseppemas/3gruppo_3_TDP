@@ -105,11 +105,12 @@ def inputCheck(userChoice ,data):
             print("Ricontrolla il codice del campionato inserito" + bcolors.ENDC)
     if userChoice == '5':
         try:
-            text = str(input(bcolors.OKBLUE + bcolors.BOLD + "\nInserisci Codice Campionato: " + bcolors.ENDC))
-            text = text.upper()
             date = input(bcolors.OKBLUE+"Inserisci Data yyyy-mm-dd: "+ bcolors.ENDC)
-            camp = data[text]
-            matches = camp.getMatches(date)
+            matches = []
+            #TO FIX
+            for elem in data:
+                camp = data[elem._key]
+                matches += [camp.getMatches(date)]
             if matches is -1:
                 print(bcolors.BOLD+bcolors.WARNING+"Nessuna partita giocata in questa data"+bcolors.ENDC)
             else:

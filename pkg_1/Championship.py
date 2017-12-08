@@ -141,7 +141,6 @@ class Championship(SortedTableMap):
                 self._set_ranking(days,n_match, nextday)
                 if toCheck:
                     isMatched=self._checkDay(days,n_match, rec, temp)
-                    print(isMatched, days)
                     if not isMatched and nextday and len(temp)>=len(self.teams)//4:
                         #print("in if")
                         for i in temp:
@@ -377,7 +376,7 @@ class Championship(SortedTableMap):
     def _daysToDate(self, days):
         return datetime.date(1899, 12, 30) + datetime.timedelta(days)
 
-
+"""
 text = str(input("Inserisci Codice Campionato: "))
 #data = DataList()
 camp = Championship(text)
@@ -392,7 +391,7 @@ for day in camp:
         print("Partita Rinviata", day - (len(camp.teams) * 2 - 2))
     for match in camp[day]:
         print("match", match, "Dati Partita: ", camp[day][match])
-
+"""
 """
 while True:
     print("Inserisci giornata")
