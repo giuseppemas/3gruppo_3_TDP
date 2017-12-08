@@ -172,6 +172,12 @@ class Championship(SortedTableMap):
                 return True
             else:
                 temp[len(temp)+1] = self[days][n_match]
+<<<<<<< HEAD
+=======
+                #for i in temp:
+                #    print(temp[i])
+                #print(len(temp),"len temp")
+>>>>>>> 22cda39fd64b2752cc4a8d5c2e782643b7b23267
                 return False
 
     def _checkBeforeDay(self, day, rec):
@@ -377,7 +383,7 @@ class Championship(SortedTableMap):
     def _daysToDate(self, days):
         return datetime.date(1899, 12, 30) + datetime.timedelta(days)
 
-
+"""
 text = str(input("Inserisci Codice Campionato: "))
 #data = DataList()
 camp = Championship(text)
@@ -393,7 +399,7 @@ for day in camp:
     for match in camp[day]:
         print("match", match, "Dati Partita: ", camp[day][match])
 
-"""
+
 while True:
     print("Inserisci giornata")
     day = input()
