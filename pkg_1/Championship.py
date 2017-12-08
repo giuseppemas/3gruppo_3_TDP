@@ -104,10 +104,11 @@ class Championship(SortedTableMap):
                                 self[days][i] = temp[i]
                             days += 1
                             rec-=1
-                            nextday =True
+                            nextday = True
                             self[days] = self.DayofSeason()
                             self[days][n_match] = ()
                             temp = self.DayofSeason()
+                            toCheck = False
                         else:
                             temp=self.DayofSeason()
                             rec+=1
@@ -116,11 +117,10 @@ class Championship(SortedTableMap):
                                 l += 1
                                 self[rec][l] = self[days][l]
                                 temp[l]=self[days][l]
+                            toCheck = True
                         teams = 0
                         n_match = 1
                         lastdate = k[0]
-                        toCheck = True
-
                     else:
                         nextday=True
                         teams = 0
@@ -139,7 +139,7 @@ class Championship(SortedTableMap):
                 self._set_partialranking(days,n_match,nextday)
                 self._set_ranking(days,n_match, nextday)
                 if toCheck:
-                    isMatched=self._checkDay(days,n_match, temp)
+                    isMatched=self._checkDay(days,n_match, rec, temp)
                     if not isMatched and nextday and len(temp)>=len(self.teams)//4:
                         print("in if")
                         for i in temp:
@@ -163,9 +163,9 @@ class Championship(SortedTableMap):
                 else:
                     self[days][n_match] += [k[0]]
 
-    def _checkDay(self, days, n_match, temp):
-        for i in temp:
-            if temp[i][1]==self[days][n_match][1] or temp[i][1]==self[days][n_match][2] or temp[i][2]==self[days][n_match][1] or temp[i][2]==self[days][n_match][2]:
+    def _checkDay(self, days, n_match, rec, temp):
+        for i in self[rec]:
+            if self[rec][i][1]==self[days][n_match][1] or self[rec][i][1]==self[days][n_match][2] or self[rec][i][2]==self[days][n_match][1] or self[rec][i][2]==self[days][n_match][2]:
                 temp = self.DayofSeason()
                 print(len(temp))
                 return True
@@ -377,7 +377,10 @@ print("Numero Squadre", len(camp.teams))
 print(len(camp))
 print(camp.teams)
 for day in camp:
-    print("Day", day)
+    if day <= len(camp.teams) * 2 - 2:
+        print("Day", day)
+    else:
+        print("Partita Rinviata", day - (len(camp.teams) * 2 - 2))
     for match in camp[day]:
         print("match", match, "Dati Partita: ", camp[day][match])
 
