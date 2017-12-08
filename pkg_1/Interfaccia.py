@@ -56,21 +56,16 @@ def inputCheck(userChoice ,data):
     if userChoice == '2':
         text = str(input(bcolors.OKBLUE+bcolors.BOLD+"\nInserisci Codice Campionato: "+ bcolors.ENDC))
         text = text.upper()
+        text2 = int(input(bcolors.OKBLUE+bcolors.BOLD+"Inserisci Giornata: "+ bcolors.ENDC))
         try:
             camp = data[text]
-        except Exception as e:
-            print(bcolors.BOLD + bcolors.UNDERLINE + bcolors.FAIL + text + bcolors.FAIL + " non è nel nostro database...")
-            print("Ricontrolla il codice del campionato inserito" + bcolors.ENDC)
-        try:
-            text2 = int(input(bcolors.OKBLUE + bcolors.BOLD + "Inserisci Giornata: " + bcolors.ENDC))
             print("Classifica")
             print("Teams | Match Played | Score | Goal")
             for team in camp[text2]._ranking:
                 print(team)
         except Exception as e:
-            print(bcolors.FAIL + "La giornata " + bcolors.BOLD + bcolors.UNDERLINE + bcolors.FAIL + str(text2) + bcolors.FAIL + " non appartiene al campionato "
-                  + bcolors.FAIL + text + bcolors.FAIL)
-            print("Ricontrolla il numero delle giornate prima di riprovare." + bcolors.ENDC)
+            print(bcolors.BOLD + bcolors.UNDERLINE + bcolors.FAIL + text + bcolors.FAIL + " non è nel nostro database...")
+            print("Ricontrolla il codice del campionato inserito" + bcolors.ENDC)
 
     if userChoice == '3':
         text = str(input(bcolors.OKBLUE+bcolors.BOLD+"\nInserisci Codice Campionato: "+ bcolors.ENDC))
@@ -133,7 +128,7 @@ def inputCheck(userChoice ,data):
 def caricamentoDatabase():
     text = "Caricamento"
     temp = ""
-    for i in range(4):
+    for i in range(3):
         sys.stdout.write(".")
         sys.stdout.flush()
         time.sleep(0.2)
