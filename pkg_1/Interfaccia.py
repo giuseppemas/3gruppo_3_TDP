@@ -60,9 +60,12 @@ def inputCheck(userChoice ,data):
         try:
             camp = data[text]
             print("Classifica")
-            print("Teams | Match Played | Score | Goal")
-            for team in camp[text2]._ranking:
-                print(team)
+            print("Teams | PG | Pti | GF | GS | DR")
+            rank = camp.get_rankingday(text2,2)
+            i=0
+            for team in rank:
+                i+=1
+                print(i, team)
         except Exception as e:
             print(bcolors.BOLD + bcolors.UNDERLINE + bcolors.FAIL + text + bcolors.FAIL + " non è nel nostro database...")
             print("Ricontrolla il codice del campionato inserito" + bcolors.ENDC)
@@ -74,7 +77,7 @@ def inputCheck(userChoice ,data):
         try:
             camp = data[text]
             print("Classifica basata sui risultati del primo tempo")
-            print("Teams | Match Played | Score | Goal")
+            print("Teams | PG | Pti | GF | GS | DR")
             for team in camp[text2]._partialrank:
                 print(team)
         except Exception as e:
@@ -110,8 +113,10 @@ def inputCheck(userChoice ,data):
             #TO FIX
             for elem in data:
                 camp = data[elem._key]
-                matches += [camp.getMatches(date)]
-            if matches is -1:
+                temp = camp.getMatches(date)
+                if temp is not -1:
+                    matches += temp
+            if len(matches) is 0:
                 print(bcolors.BOLD+bcolors.WARNING+"Nessuna partita giocata in questa data"+bcolors.ENDC)
             else:
                 for elem in matches:
