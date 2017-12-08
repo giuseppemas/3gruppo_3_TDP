@@ -141,7 +141,7 @@ class Championship(SortedTableMap):
                 if toCheck:
                     isMatched=self._checkDay(days,n_match, rec, temp)
                     if not isMatched and nextday and len(temp)>=len(self.teams)//4:
-                        print("in if")
+                        #print("in if")
                         for i in temp:
                             self[days][i] = temp[i]
                         n_match = 1
@@ -150,7 +150,7 @@ class Championship(SortedTableMap):
                         self[days] = self.DayofSeason()
                         self[days][n_match] = ()
                         temp = self.DayofSeason()
-                        print("End", len(temp))
+                        #print("End", len(temp))
                         toCheck = False
 
                     elif isMatched:
@@ -167,13 +167,13 @@ class Championship(SortedTableMap):
         for i in self[rec]:
             if self[rec][i][1]==self[days][n_match][1] or self[rec][i][1]==self[days][n_match][2] or self[rec][i][2]==self[days][n_match][1] or self[rec][i][2]==self[days][n_match][2]:
                 temp = self.DayofSeason()
-                print(len(temp))
+                #print(len(temp))
                 return True
             else:
                 temp[len(temp)+1] = self[days][n_match]
-                for i in temp:
-                    print(temp[i])
-                print(len(temp),"len temp")
+                #for i in temp:
+                #    print(temp[i])
+                #print(len(temp),"len temp")
                 return False
 
 
@@ -368,7 +368,7 @@ class Championship(SortedTableMap):
     def _daysToDate(self, days):
         return datetime.date(1899, 12, 30) + datetime.timedelta(days)
 
-
+"""
 text = str(input("Inserisci Codice Campionato: "))
 #data = DataList()
 camp = Championship(text)
@@ -384,7 +384,7 @@ for day in camp:
     for match in camp[day]:
         print("match", match, "Dati Partita: ", camp[day][match])
 
-"""
+
 while True:
     print("Inserisci giornata")
     day = input()
