@@ -82,8 +82,10 @@ class Championship(SortedTableMap):
         days = 1
         n_match = 0
         nextday=False
+        toCheck = False
         rec = len(self.teams)*2-2
         self[days] = self.DayofSeason()
+        temp = self.DayofSeason()
         for k in self._read_sheet():
             if k[1] == 0 and k[2] == 1:  #k[0] value, k[1] column index, k[2] row index
                 lastdate = k[0]
@@ -96,15 +98,28 @@ class Championship(SortedTableMap):
                     lastdate = k[0]
                     nextday=False
                 else:
-                    if len(self[days])<len(self.teams)//4:
-                        rec+=1
-                        self[rec] = self.DayofSeason()
-                        for l in range(len(self[days])):
-                            l += 1
-                            self[rec][l] = self[days][l]
+                    if len(self[days])<=len(self.teams)//4:
+                        if len(temp) is not 0:
+                            for i in temp:
+                                self[days][i] = temp[i]
+                            days += 1
+                            rec-=1
+                            nextday =True
+                            self[days] = self.DayofSeason()
+                            self[days][n_match] = ()
+                            temp = self.DayofSeason()
+                        else:
+                            temp=self.DayofSeason()
+                            rec+=1
+                            self[rec] = self.DayofSeason()
+                            for l in range(len(self[days])):
+                                l += 1
+                                self[rec][l] = self[days][l]
+                                temp[l]=self[days][l]
                         teams = 0
                         n_match = 1
                         lastdate = k[0]
+                        toCheck = True
 
                     else:
                         nextday=True
@@ -123,11 +138,45 @@ class Championship(SortedTableMap):
                 teams+=2
                 self._set_partialranking(days,n_match,nextday)
                 self._set_ranking(days,n_match, nextday)
+                if toCheck:
+                    isMatched=self._checkDay(days,n_match, temp)
+                    if not isMatched and nextday and len(temp)>=len(self.teams)//4:
+                        print("in if")
+                        for i in temp:
+                            self[days][i] = temp[i]
+                        n_match = 1
+                        days += 1
+                        teams=0
+                        self[days] = self.DayofSeason()
+                        self[days][n_match] = ()
+                        temp = self.DayofSeason()
+                        print("End", len(temp))
+                        toCheck = False
+
+                    elif isMatched:
+                        temp = self.DayofSeason()
+                        toCheck = False
+
             else:
                 if type(k[0])!=type(""):
                     self[days][n_match] += [int(k[0])]
                 else:
                     self[days][n_match] += [k[0]]
+
+    def _checkDay(self, days, n_match, temp):
+        for i in temp:
+            if temp[i][1]==self[days][n_match][1] or temp[i][1]==self[days][n_match][2] or temp[i][2]==self[days][n_match][1] or temp[i][2]==self[days][n_match][2]:
+                temp = self.DayofSeason()
+                print(len(temp))
+                return True
+            else:
+                temp[len(temp)+1] = self[days][n_match]
+                for i in temp:
+                    print(temp[i])
+                print(len(temp),"len temp")
+                return False
+
+
 
     def get_rankingday(self,day):
         return self[day]._ranking
@@ -319,7 +368,7 @@ class Championship(SortedTableMap):
     def _daysToDate(self, days):
         return datetime.date(1899, 12, 30) + datetime.timedelta(days)
 
-"""
+
 text = str(input("Inserisci Codice Campionato: "))
 #data = DataList()
 camp = Championship(text)
@@ -328,13 +377,10 @@ print("Numero Squadre", len(camp.teams))
 print(len(camp))
 print(camp.teams)
 for day in camp:
-    if day <= len(camp.teams)*2-2:
-        print("Day", day)
-    else:
-        print("Partita Rinviata", day-(len(camp.teams)*2-2))
+    print("Day", day)
     for match in camp[day]:
         print("match", match, "Dati Partita: ", camp[day][match])
-"""
+
 """
 while True:
     print("Inserisci giornata")
