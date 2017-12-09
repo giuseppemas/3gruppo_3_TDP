@@ -34,7 +34,7 @@ def menuChoice(data):
               "7) Dati una giornata e un intero k, stampare le k squadre tra tutti i campionati che hanno subito meno goal.\n"
               "8) Dati una giornata e un intero k, stampare le k squadre tra tutti i campionati con la migliore differenza"
               "reti.\n"
-              "9) Dati una giornata e un campionato, stampare la squadra tra tutti i campionati con il maggior numero di"
+              "9) Dati una giornata e un campionato, stampare la squadra con il maggior numero di"
               "vittorie, la squadra con il maggior numero di vittorie in casa, la squadra con il maggior numero di vittorie in"
               "trasferta.\n"
               "10) Uscire dall'applicazione del Centro Scommesse.\n")
@@ -221,7 +221,7 @@ def inputCheck(userChoice ,data):
 
     if userChoice == '9':
         print(bcolors.OKBLUE + bcolors.BOLD + "Hai scelto l'opzione 9: ")
-        print("Dati una giornata e un campionato, stampare la squadra tra tutti i campionati con il maggior numero di"
+        print("Dati una giornata e un campionato, stampare la squadra con il maggior numero di"
               "vittorie, la squadra con il maggior numero di vittorie in casa, la squadra con il maggior numero di vittorie in"
               "trasferta." + bcolors.ENDC)
         try:
@@ -316,7 +316,7 @@ print("1) Dato un campionato, stampare l’elenco delle squadre del campionato.\
       "7) Dati una giornata e un intero k, stampare le k squadre tra tutti i campionati che hanno subito meno goal.\n"
       "8) Dati una giornata e un intero k, stampare le k squadre tra tutti i campionati con la migliore differenza"
       "reti.\n"
-      "9) Dati una giornata e un campionato, stampare la squadra tra tutti i campionati con il maggior numero di"
+      "9) Dati una giornata e un campionato, stampare la squadra con il maggior numero di"
       "vittorie, la squadra con il maggior numero di vittorie in casa, la squadra con il maggior numero di vittorie in"
       "trasferta.\n"
       "10) Uscire dall'applicazione del Centro Scommesse.\n")
