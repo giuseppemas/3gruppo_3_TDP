@@ -54,18 +54,21 @@ def inputCheck(userChoice ,data):
             print("Ricontrolla il codice del campionato inserito" + bcolors.ENDC)
 
     if userChoice == '2':
-        text = str(input(bcolors.OKBLUE+bcolors.BOLD+"\nInserisci Codice Campionato: "+ bcolors.ENDC))
+        text = str(input(bcolors.OKBLUE + bcolors.BOLD + "\nInserisci Codice Campionato: " + bcolors.ENDC))
         text = text.upper()
         try:
             camp = data[text]
             print("Numero Squadre: ", len(camp.teams))
-            print("Numero giornate: ", len(camp.teams)*2 - 2)
+            if text == "SC0":  # caso particolare
+                print("Numero giornate: ", 38)
+            print("Numero giornate: ", len(camp.teams) * 2 - 2)
         except Exception as e:
-            print(bcolors.BOLD + bcolors.UNDERLINE + bcolors.FAIL + text + bcolors.FAIL + " non è nel nostro database...")
+            print(
+                bcolors.BOLD + bcolors.UNDERLINE + bcolors.FAIL + text + bcolors.FAIL + " non è nel nostro database...")
             print("Ricontrolla il codice del campionato inserito" + bcolors.ENDC)
         try:
             text2 = int(input(bcolors.OKBLUE + bcolors.BOLD + "Inserisci Giornata: " + bcolors.ENDC))
-            if text2 <= (len(camp.teams)*2 - 2):
+            if text2 <= (len(camp.teams) * 2 - 2) or (text == "SC0" and text2 <= 38):
                 print("Classifica")
                 print("Teams | PG | Pti ")
                 rank = camp.get_rankingday(text2, 2)
@@ -87,13 +90,15 @@ def inputCheck(userChoice ,data):
         try:
             camp = data[text]
             print("Numero Squadre: ", len(camp.teams))
+            if text == "SC0":  # caso particolare
+                print("Numero giornate: ", 38)
             print("Numero giornate: ", len(camp.teams) * 2 - 2)
         except Exception as e:
             print(bcolors.BOLD + bcolors.UNDERLINE + bcolors.FAIL + text + bcolors.FAIL + " non è nel nostro database...")
             print("Ricontrolla il codice del campionato inserito" + bcolors.ENDC)
         try:
             text2 = int(input(bcolors.OKBLUE + bcolors.BOLD + "Inserisci Giornata: " + bcolors.ENDC))
-            if text2 <= (len(camp.teams) * 2 - 2):
+            if text2 <= (len(camp.teams) * 2 - 2) or (text == "SC0" and text2 <= 38):
                 print("Classifica basata sui risultati del primo tempo")
                 print("Teams | PG | Pti ")
                 i = 0
