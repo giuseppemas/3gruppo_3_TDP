@@ -59,8 +59,8 @@ class DataList(MapBase):
                 day = len(item._value.teams) * 3 - 3
             else:
                 day=len(item._value.teams)*2-2
-            rank += item._value.get_rankingday(day, 4)
-        rank = self._sortRank(rank, 0, len(rank)-1, 4)
+            rank += item._value.get_rankingday(day, 3)
+        rank = self._sortRank(rank, 0, len(rank)-1, 3)
         for j in range(k):
             result += [rank[j]]
         return result
@@ -82,7 +82,7 @@ class DataList(MapBase):
     def _partition(self, rank, start, end, order):
         pos = start
         for i in range(start, end):
-            if order==3:
+            if order==4:
                 if rank[i][order] < rank[end][order]:
                     rank[i], rank[pos] = rank[pos], rank[i]
                     pos += 1
@@ -251,11 +251,11 @@ class Championship(SortedTableMap):
             del self[rec][len(self[rec])]
 
     def get_rankingday(self,day, order):
-        self._sortRank(day, 0, len(self[day]._ranking)-1, order)
+        self._sortRank(day, 0, len(self[day]._ranking)-1, order,False)
         return self[day]._ranking
 
     def get_partialrankingday(self,day):
-        self._sortRank(day, 0, len(self[day]._partialrank)-1,2) #Fix sort for partial rank actually it doesn't work
+        self._sortRank(day, 0, len(self[day]._partialrank)-1,2,True)
         return self[day]._partialrank
 
     def get_historyTeam(self, day, team):
@@ -413,26 +413,39 @@ class Championship(SortedTableMap):
                         self[day]._partialrank[i] = elem
                     i += 1
 
-    def _partition(self, day , start, end, order):
+    def _partition(self, day , start, end, order, partial):
         pos = start
-        for i in range(start, end):
-            if order==3:
-                if self[day]._ranking[i][order] < self[day]._ranking[end][order]:
-                    self[day]._ranking[i], self[day]._ranking[pos] = self[day]._ranking[pos], self[day]._ranking[i]
-                    pos += 1
-            else:
-                if self[day]._ranking[i][order] > self[day]._ranking[end][order]:
-                    self[day]._ranking[i], self[day]._ranking[pos] = self[day]._ranking[pos], self[day]._ranking[i]
-                    pos += 1
+        if partial:
+            for i in range(start, end):
+                if order == 4:
+                    if self[day]._partialrank[i][order] < self[day]._partialrank[end][order]:
+                        self[day]._partialrank[i], self[day]._partialrank[pos] = self[day]._partialrank[pos], self[day]._partialrank[i]
+                        pos += 1
+                else:
+                    if self[day]._partialrank[i][order] > self[day]._partialrank[end][order]:
+                        self[day]._partialrank[i], self[day]._partialrank[pos] = self[day]._partialrank[pos], self[day]._partialrank[i]
+                        pos += 1
 
-        self[day]._ranking[pos], self[day]._ranking[end] = self[day]._ranking[end], self[day]._ranking[pos]
+            self[day]._partialrank[pos], self[day]._partialrank[end] = self[day]._partialrank[end], self[day]._partialrank[pos]
+        else:
+            for i in range(start, end):
+                if order==4:
+                    if self[day]._ranking[i][order] < self[day]._ranking[end][order]:
+                        self[day]._ranking[i], self[day]._ranking[pos] = self[day]._ranking[pos], self[day]._ranking[i]
+                        pos += 1
+                else:
+                    if self[day]._ranking[i][order] > self[day]._ranking[end][order]:
+                        self[day]._ranking[i], self[day]._ranking[pos] = self[day]._ranking[pos], self[day]._ranking[i]
+                        pos += 1
+
+            self[day]._ranking[pos], self[day]._ranking[end] = self[day]._ranking[end], self[day]._ranking[pos]
         return pos
 
-    def _sortRank(self, day, start, end, order):
+    def _sortRank(self, day, start, end, order,partial):
         if start < end:
-            pos = self._partition(day, start, end, order)
-            self._sortRank(day, start, pos - 1, order)
-            self._sortRank(day, pos + 1, end, order)
+            pos = self._partition(day, start, end, order, partial)
+            self._sortRank(day, start, pos - 1, order,partial)
+            self._sortRank(day, pos + 1, end, order, partial)
 
 
     def getMatches(self, date):
