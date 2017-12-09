@@ -79,6 +79,30 @@ class DataList(MapBase):
             result += [rank[j]]
         return result
 
+    def getTeamWins(self):
+        i=0
+        for item in self._listChampionships:
+            if item._key == "SC0":
+                day = len(item._value.teams) * 3 - 3
+            else:
+                day = len(item._value.teams) * 2 - 2
+            if i==0:
+                lastwin=item._value.get_rankingday(day,6)[0]
+                lasthomewin=item._value.get_rankingday(day,7)[0]
+                lastAwayWin=item._value.get_rankingday(day,8)[0]
+                i+=1
+            else:
+                win = item._value.get_rankingday(day, 6)[0]
+                homewin = item._value.get_rankingday(day, 7)[0]
+                AwayWin = item._value.get_rankingday(day, 8)[0]
+                if win[6]>lastwin[6]:
+                    lastwin=win
+                if homewin[7]>lasthomewin[7]:
+                    lasthomewin=homewin
+                if AwayWin[8]>lastAwayWin[8]:
+                    lastAwayWin=AwayWin
+        return lastwin,lasthomewin,lastAwayWin
+
     def _partition(self, rank, start, end, order):
         pos = start
         for i in range(start, end):
@@ -284,14 +308,14 @@ class Championship(SortedTableMap):
     def _set_ranking(self, day, match, nextday):
         if day-1==0:
             if self[day][match][5]=='H':
-                self[day]._ranking.append([self[day][match][1], 1, 3, self[day][match][3], self[day][match][4], self[day][match][3]-self[day][match][4]])
-                self[day]._ranking.append([self[day][match][2], 1, 0, self[day][match][4], self[day][match][3], self[day][match][4]-self[day][match][3]])
+                self[day]._ranking.append([self[day][match][1], 1, 3, self[day][match][3], self[day][match][4], self[day][match][3]-self[day][match][4],1,1,0])
+                self[day]._ranking.append([self[day][match][2], 1, 0, self[day][match][4], self[day][match][3], self[day][match][4]-self[day][match][3],0,0,0])
             elif self[day][match][5]=='D':
-                self[day]._ranking.append([self[day][match][1], 1, 1, self[day][match][3], self[day][match][4], self[day][match][3]-self[day][match][4]])
-                self[day]._ranking.append([self[day][match][2], 1, 1, self[day][match][4], self[day][match][3], self[day][match][4]-self[day][match][3]])
+                self[day]._ranking.append([self[day][match][1], 1, 1, self[day][match][3], self[day][match][4], self[day][match][3]-self[day][match][4],0,0,0])
+                self[day]._ranking.append([self[day][match][2], 1, 1, self[day][match][4], self[day][match][3], self[day][match][4]-self[day][match][3],0,0,0])
             elif self[day][match][5] == 'A':
-                self[day]._ranking.append([self[day][match][1], 1, 0, self[day][match][3], self[day][match][4], self[day][match][3]-self[day][match][4]])
-                self[day]._ranking.append([self[day][match][2], 1, 3, self[day][match][4], self[day][match][3], self[day][match][4]-self[day][match][3]])
+                self[day]._ranking.append([self[day][match][1], 1, 0, self[day][match][3], self[day][match][4], self[day][match][3]-self[day][match][4],0,0,0])
+                self[day]._ranking.append([self[day][match][2], 1, 3, self[day][match][4], self[day][match][3], self[day][match][4]-self[day][match][3],1,0,1])
         else:
             if nextday:
                 if len(self[day]._ranking)==0:
@@ -309,6 +333,8 @@ class Championship(SortedTableMap):
                         elem[3]+=self[day][match][3]
                         elem[4]+=self[day][match][4]
                         elem[5]= elem[3]-elem[4]
+                        elem[6] +=1
+                        elem[7] +=1
                         self[day]._ranking[i]=elem
 
                     if elem[0] == self[day][match][2]:
@@ -351,6 +377,8 @@ class Championship(SortedTableMap):
                         elem[3] += self[day][match][4]
                         elem[4] += self[day][match][3]
                         elem[5] = elem[3] - elem[4]
+                        elem[6] += 1
+                        elem[8] += 1
                         self[day]._ranking[i] = elem
                     i += 1
 

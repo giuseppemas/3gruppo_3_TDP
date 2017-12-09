@@ -15,7 +15,7 @@ class bcolors:
 
 ### FUNZIONI UTILI PER L'INTERFACCIA ###
 def menuChoice(data):
-    valid = ['1', '2', '3', '4', '5', '6', '7','8','10','debug']
+    valid = ['1', '2', '3', '4', '5', '6', '7','8','9','10','debug']
     userChoice = str(input(bcolors.OKBLUE+bcolors.BOLD+"\nInserisci il numero dell'operazione che vuoi effettuare: " + bcolors.ENDC))
     if userChoice in valid:
         inputCheck(userChoice,data)
@@ -177,6 +177,17 @@ def inputCheck(userChoice ,data):
             result = data.getTeamDiffGoal(text)
             for elem in result:
                 print(elem[0], elem[5])
+        except Exception as e:
+            print(e)
+            print(bcolors.BOLD + bcolors.FAIL + "Ops... Qualcosa è andato storto"+ bcolors.ENDC)
+
+    if userChoice == '9':
+        try:
+            TeamWin, TeamHomeWin, TeamAwayWin = data.getTeamWins()
+            print("Team: ", TeamWin[0], "- Numero Vittorie: ", TeamWin[6])
+            print("Team: ", TeamHomeWin[0], "- Numero Vittorie Casa: ", TeamHomeWin[7])
+            print("Team: ", TeamAwayWin[0], "- Numero Vittorie Trasferta: ", TeamAwayWin[8])
+
         except Exception as e:
             print(e)
             print(bcolors.BOLD + bcolors.FAIL + "Ops... Qualcosa è andato storto"+ bcolors.ENDC)
