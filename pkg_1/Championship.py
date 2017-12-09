@@ -42,7 +42,7 @@ class DataList(MapBase):
         result = []
         for item in self._listChampionships:
             if item._key == "SC0":
-                day = len(item._value.teams) * 3 - 3
+                day = 38
             else:
                 day = len(item._value.teams) * 2 - 2
             rank += item._value.get_rankingday(day, 4)
@@ -56,7 +56,7 @@ class DataList(MapBase):
         result = []
         for item in self._listChampionships:
             if item._key == "SC0":
-                day = len(item._value.teams) * 3 - 3
+                day = 38
             else:
                 day=len(item._value.teams)*2-2
             rank += item._value.get_rankingday(day, 3)
@@ -70,7 +70,7 @@ class DataList(MapBase):
         result = []
         for item in self._listChampionships:
             if item._key == "SC0":
-                day = len(item._value.teams) * 3 - 3
+                day = 38
             else:
                 day = len(item._value.teams) * 2 - 2
             rank += item._value.get_rankingday(day, 5)
@@ -83,7 +83,7 @@ class DataList(MapBase):
         i=0
         for item in self._listChampionships:
             if item._key == "SC0":
-                day = len(item._value.teams) * 3 - 3
+                day = 38
             else:
                 day = len(item._value.teams) * 2 - 2
             if i==0:
