@@ -301,7 +301,7 @@ class Championship(SortedTableMap):
         history = []
         end = day-5
         if end<0:
-            end = day-(5-end)
+            end = day-(5+end)
         for days in range(day, end, -1):
             for match in self[days]:
                 if team == self[days][match][1]:
