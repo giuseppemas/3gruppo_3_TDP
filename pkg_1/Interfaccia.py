@@ -271,10 +271,10 @@ def inputCheck(userChoice ,data):
             camp = data[text]
             for day in camp:
                 if text=="SC0":
-                    if day <= len(camp.teams) * 3 - 3:
+                    if day <= 38:
                         print("Day", day)
                     else:
-                        print("Partita Rinviata", day - (len(camp.teams) * 3 - 3))
+                        print("Partita Rinviata", day - 38)
                 else:
                     if day <= len(camp.teams) * 2 - 2:
                         print("Day", day)

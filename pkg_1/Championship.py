@@ -186,7 +186,13 @@ class Championship(SortedTableMap):
         n_match = 0
         nextday=False
         toCheck = False
-        rec = len(self.teams)*2-2
+        limit = len(self.teams)//4
+        limit2 = len(self.teams)//4
+        if self.name == "SC0":
+            rec =38
+            limit = limit-1
+        else:
+            rec = len(self.teams)*2-2
         self[days] = self.DayofSeason()
         temp = self.DayofSeason()
         for k in self._read_sheet():
@@ -201,8 +207,8 @@ class Championship(SortedTableMap):
                     lastdate = k[0]
                     nextday=False
                 else:
-                    if len(self[days])<=len(self.teams)//4:
-                        if len(temp) is not 0:
+                    if len(self[days])<=limit:
+                        if len(temp) is not 0 and len(temp)>=limit2:
                             for i in temp:
                                 self[days][i] = temp[i]
                             days += 1
@@ -221,7 +227,7 @@ class Championship(SortedTableMap):
                                 self[rec][l] = self[days][l]
                                 temp[l]=self[days][l]
                             toCheck = True
-                            self._checkBeforeDay(days, rec)
+                            temp = self._checkBeforeDay(days, rec, temp)
                         teams = 0
                         n_match = 1
                         lastdate = k[0]
@@ -231,7 +237,7 @@ class Championship(SortedTableMap):
                         n_match = 1
                         days += 1
                         self[days]= self.DayofSeason()
-                        self[days][n_match] = ()
+                        self[days][n_match] = []
                         lastdate = k[0]
             #print("days", days, "n_match", n_match)
             if k[1]==0:
@@ -244,7 +250,7 @@ class Championship(SortedTableMap):
                 self._set_ranking(days,n_match, nextday)
                 if toCheck:
                     isMatched=self._checkDay(days,n_match, rec, temp)
-                    if not isMatched and nextday and len(temp)>=len(self.teams)//4:
+                    if not isMatched and nextday and len(temp)>=len(self.teams)//4 :
                         #print("in if")
                         for i in temp:
                             self[days][i] = temp[i]
@@ -252,7 +258,7 @@ class Championship(SortedTableMap):
                         days += 1
                         teams=0
                         self[days] = self.DayofSeason()
-                        self[days][n_match] = ()
+                        self[days][n_match] = []
                         temp = self.DayofSeason()
                         #print("End", len(temp))
                         toCheck = False
@@ -266,28 +272,34 @@ class Championship(SortedTableMap):
                 else:
                     self[days][n_match] += [k[0]]
 
-    def _checkDay(self, days, n_match, rec, temp):
+    def _checkDay(self, days, n_match, rec, temp): #ToFIX SC0 Championship
         for i in self[rec]:
             if self[rec][i][1]==self[days][n_match][1] or self[rec][i][1]==self[days][n_match][2] or self[rec][i][2]==self[days][n_match][1] or self[rec][i][2]==self[days][n_match][2]:
-                temp = self.DayofSeason()
-                #print(len(temp))
                 return True
             else:
                 temp[len(temp)+1] = self[days][n_match]
                 return False
 
-    def _checkBeforeDay(self, day, rec):
+    def _checkBeforeDay(self, day, rec, temp):
         if len(self[day-1]) == len(self.teams)//2:
-            return
+            return temp
         else:
             for i in self[day-1]:
                 if self[rec][1][1] == self[day-1][i][1] or self[rec][1][1] == self[day-1][i][2] or self[rec][1][2] == self[day-1][i][1] or self[rec][1][2] == self[day-1][i][2]:
-                    return
+                    return temp
             self[day-1][len(self[day-1])+1]=self[rec][1]
             for k in self[rec]:
                 if k<len(self[rec]):
                     self[rec][k]= self[rec][k+1]
             del self[rec][len(self[rec])]
+            if len(temp)==1:
+                temp = self.DayofSeason()
+            else:
+                for k in temp:
+                    if k < len(temp):
+                        temp[k] = temp[k + 1]
+                del temp[len(temp)]
+            return temp
 
     def get_rankingday(self,day, order):
         self._sortRank(day, 0, len(self[day]._ranking)-1, order,False)
