@@ -68,7 +68,8 @@ def inputCheck(userChoice ,data):
             print("Numero Squadre: ", len(camp.teams))
             if text == "SC0":  # caso particolare
                 print("Numero giornate: ", 38)
-            print("Numero giornate: ", len(camp.teams) * 2 - 2)
+            else:
+                print("Numero giornate: ", len(camp.teams) * 2 - 2)
         except Exception as e:
             print(
                 bcolors.BOLD + bcolors.UNDERLINE + bcolors.FAIL + text + bcolors.FAIL + " non è nel nostro database...")
@@ -103,7 +104,8 @@ def inputCheck(userChoice ,data):
             print("Numero Squadre: ", len(camp.teams))
             if text == "SC0":  # caso particolare
                 print("Numero giornate: ", 38)
-            print("Numero giornate: ", len(camp.teams) * 2 - 2)
+            else:
+                print("Numero giornate: ", len(camp.teams) * 2 - 2)
         except Exception as e:
             print(bcolors.BOLD + bcolors.UNDERLINE + bcolors.FAIL + text + bcolors.FAIL + " non è nel nostro database...")
             print("Ricontrolla il codice del campionato inserito" + bcolors.ENDC)
@@ -131,25 +133,40 @@ def inputCheck(userChoice ,data):
         print("Campionati: E0, SC0, D1, SP1, I1, F1, N1, B1, P1, T1, G1")
         text = str(input(bcolors.OKBLUE+bcolors.BOLD+"\nInserisci Codice Campionato: "+ bcolors.ENDC))
         text = text.upper()
-        text2 = int(input(bcolors.OKBLUE+bcolors.BOLD+"Inserisci Giornata: "+ bcolors.ENDC))
-        text3 = str(input(bcolors.OKBLUE + bcolors.BOLD + "Inserisci Squadra: " + bcolors.ENDC))
-        team = text3.capitalize()
         try:
             camp = data[text]
-            print("Last 5 matches to day",text2)
-            history = camp.get_historyTeam(text2, team)
-            print(team, end= " ")
-            for elem in history:
-                if elem == 'W':
-                    print(bcolors.OKGREEN+elem, end=" ")
-                elif elem =='A':
-                    print(bcolors.FAIL+elem, end=" ")
-                elif elem == 'D':
-                    print(bcolors.ENDC+elem, end=" ")
+            print("Numero Squadre: ", len(camp.teams))
+            if text == "SC0":  # caso particolare
+                print("Numero giornate: ", 38)
+            else:
+                print("Numero giornate: ", len(camp.teams) * 2 - 2)
         except Exception as e:
             print(e, e.with_traceback(tb=None))
             print(bcolors.BOLD + bcolors.UNDERLINE + bcolors.FAIL + text + bcolors.FAIL + " non è nel nostro database...")
             print("Ricontrolla il codice del campionato inserito" + bcolors.ENDC)
+        try:
+            text2 = int(input(bcolors.OKBLUE + bcolors.BOLD + "Inserisci Giornata: " + bcolors.ENDC))
+            if text2 <= (len(camp.teams) * 2 - 2) or (text == "SC0" and text2 <= 38):
+                print(camp.teams)
+            else:
+                raise Exception()
+            text3 = str(input(bcolors.OKBLUE + bcolors.BOLD + "Inserisci Squadra: " + bcolors.ENDC))
+            team = text3.capitalize()
+            print("Ultimi 5 risultati dal giorno:", text2)
+            history = camp.get_historyTeam(text2, team)
+            print(team, end=" ")
+            for elem in history:
+                if elem == 'W':
+                    print(bcolors.OKGREEN + elem, end=" ")
+                elif elem == 'A':
+                    print(bcolors.FAIL + elem, end=" ")
+                elif elem == 'D':
+                    print(bcolors.ENDC + elem, end=" ")
+        except Exception as ex:
+            print(bcolors.FAIL + "La giornata " + bcolors.BOLD + bcolors.UNDERLINE + bcolors.FAIL + str(
+                text2) + bcolors.FAIL + " non appartiene al campionato "
+                  + bcolors.FAIL + text + bcolors.FAIL)
+            print("Ricontrolla il numero delle giornate prima di riprovare." + bcolors.ENDC)
 
     if userChoice == '5':
         print(bcolors.OKBLUE + bcolors.BOLD + "Hai scelto l'opzione 5: ")
