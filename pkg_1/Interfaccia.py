@@ -15,7 +15,7 @@ class bcolors:
 
 ### FUNZIONI UTILI PER L'INTERFACCIA ###
 def menuChoice(data):
-    valid = ['1', '2', '3', '4','5', '10',]
+    valid = ['1', '2', '3', '4', '5', '6', '7','8','10',]
     userChoice = str(input(bcolors.OKBLUE+bcolors.BOLD+"\nInserisci il numero dell'operazione che vuoi effettuare: " + bcolors.ENDC))
     if userChoice in valid:
         inputCheck(userChoice,data)
@@ -124,9 +124,39 @@ def inputCheck(userChoice ,data):
         except TypeError as e:
             print(e, e.with_traceback(sys.exc_info()), bcolors.FAIL+"The insert date is not correct"+bcolors.ENDC)
         except Exception:
-            print(bcolors.BOLD + bcolors.UNDERLINE + bcolors.FAIL + text + bcolors.FAIL + " non è nel nostro database...")
-            print("Ricontrolla il codice del campionato inserito" + bcolors.ENDC)
+            print(bcolors.BOLD + bcolors.UNDERLINE + bcolors.FAIL + "Ops.. Qualcosa è andato storto...")
+            print("Ricontrolla la data inserita" + bcolors.ENDC)
 
+    if userChoice == '6':
+        text = int(input(bcolors.OKBLUE+bcolors.BOLD+"\nInserisci Un intero k : "+ bcolors.ENDC))
+        try:
+            result = data.getTeamMoreGoal(text)
+            for elem in result:
+                print(elem[0], elem[3])
+        except Exception as e:
+            print(e)
+            print(bcolors.BOLD + bcolors.FAIL + "Ops... Qualcosa è andato storto"+ bcolors.ENDC)
+
+    if userChoice == '7':
+        text = int(input(bcolors.OKBLUE+bcolors.BOLD+"\nInserisci Un intero k : "+ bcolors.ENDC))
+        try:
+            result = data.getTeamLessGoal(text)
+            for elem in result:
+                print(elem[0], elem[4])
+        except Exception as e:
+            print(e)
+            print(bcolors.BOLD + bcolors.FAIL + "Ops... Qualcosa è andato storto"+ bcolors.ENDC)
+
+    if userChoice == '8':
+        text = int(input(bcolors.OKBLUE+bcolors.BOLD+"\nInserisci Un intero k : "+ bcolors.ENDC))
+        try:
+            result = data.getTeamDiffGoal(text)
+            for elem in result:
+                print(elem[0], elem[5])
+        except Exception as e:
+            print(e)
+            print(bcolors.BOLD + bcolors.FAIL + "Ops... Qualcosa è andato storto"+ bcolors.ENDC)
+            
     if userChoice == '10':
         print(bcolors.OKBLUE+bcolors.BOLD+"\nTi ringraziamo per aver usufruito del nostro servizio.\nTorna a trovarci.\n" + bcolors.ENDC)
         exit()

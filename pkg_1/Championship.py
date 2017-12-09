@@ -37,6 +37,70 @@ class DataList(MapBase):
             if k._key == key:
                 del k
 
+    def getTeamLessGoal(self, k):
+        rank = []
+        result = []
+        for item in self._listChampionships:
+            if item._key == "SC0":
+                day = len(item._value.teams) * 3 - 3
+            else:
+                day = len(item._value.teams) * 2 - 2
+            rank += item._value.get_rankingday(day, 4)
+        rank = self._sortRank(rank, 0, len(rank) - 1, 4)
+        for j in range(k):
+            result += [rank[j]]
+        return result
+
+    def getTeamMoreGoal(self, k):
+        rank = []
+        result = []
+        for item in self._listChampionships:
+            if item._key == "SC0":
+                day = len(item._value.teams) * 3 - 3
+            else:
+                day=len(item._value.teams)*2-2
+            rank += item._value.get_rankingday(day, 4)
+        rank = self._sortRank(rank, 0, len(rank)-1, 4)
+        for j in range(k):
+            result += [rank[j]]
+        return result
+
+    def getTeamDiffGoal(self, k):
+        rank = []
+        result = []
+        for item in self._listChampionships:
+            if item._key == "SC0":
+                day = len(item._value.teams) * 3 - 3
+            else:
+                day = len(item._value.teams) * 2 - 2
+            rank += item._value.get_rankingday(day, 5)
+        rank = self._sortRank(rank, 0, len(rank) - 1, 5)
+        for j in range(k):
+            result += [rank[j]]
+        return result
+
+    def _partition(self, rank, start, end, order):
+        pos = start
+        for i in range(start, end):
+            if order==3:
+                if rank[i][order] < rank[end][order]:
+                    rank[i], rank[pos] = rank[pos], rank[i]
+                    pos += 1
+            else:
+                if rank[i][order] > rank[end][order]:
+                    rank[i], rank[pos] = rank[pos], rank[i]
+                    pos += 1
+        rank[pos], rank[end] = rank[end], rank[pos]
+        return pos,rank
+
+    def _sortRank(self, rank, start, end, order):
+        if start < end:
+            pos,rank= self._partition(rank, start, end, order)
+            self._sortRank(rank, start, pos - 1, order)
+            self._sortRank(rank, pos + 1, end, order)
+        return rank
+
+
 class Championship(SortedTableMap):
     """Class contains Days of season and Matches postponed"""
 
@@ -351,9 +415,15 @@ class Championship(SortedTableMap):
     def _partition(self, day , start, end, order):
         pos = start
         for i in range(start, end):
-            if self[day]._ranking[i][order] > self[day]._ranking[end][order]:
-                self[day]._ranking[i], self[day]._ranking[pos] = self[day]._ranking[pos], self[day]._ranking[i]
-                pos += 1
+            if order==3:
+                if self[day]._ranking[i][order] < self[day]._ranking[end][order]:
+                    self[day]._ranking[i], self[day]._ranking[pos] = self[day]._ranking[pos], self[day]._ranking[i]
+                    pos += 1
+            else:
+                if self[day]._ranking[i][order] > self[day]._ranking[end][order]:
+                    self[day]._ranking[i], self[day]._ranking[pos] = self[day]._ranking[pos], self[day]._ranking[i]
+                    pos += 1
+
         self[day]._ranking[pos], self[day]._ranking[end] = self[day]._ranking[end], self[day]._ranking[pos]
         return pos
 
