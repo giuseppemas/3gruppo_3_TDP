@@ -15,7 +15,7 @@ class bcolors:
 
 ### FUNZIONI UTILI PER L'INTERFACCIA ###
 def menuChoice(data):
-    valid = ['1', '2', '3', '4', '5', '6', '7','8','10',]
+    valid = ['1', '2', '3', '4', '5', '6', '7','8','10','debug']
     userChoice = str(input(bcolors.OKBLUE+bcolors.BOLD+"\nInserisci il numero dell'operazione che vuoi effettuare: " + bcolors.ENDC))
     if userChoice in valid:
         inputCheck(userChoice,data)
@@ -162,6 +162,27 @@ def inputCheck(userChoice ,data):
     if userChoice == '10':
         print(bcolors.OKBLUE+bcolors.BOLD+"\nTi ringraziamo per aver usufruito del nostro servizio.\nTorna a trovarci.\n" + bcolors.ENDC)
         exit()
+    if userChoice == 'debug':
+        try:
+            text = str(input(bcolors.OKBLUE + bcolors.BOLD + "\nInserisci Codice Campionato: " + bcolors.ENDC))
+            text = text.upper()
+            camp = data[text]
+            for day in camp:
+                if text=="SC0":
+                    if day <= len(camp.teams) * 3 - 3:
+                        print("Day", day)
+                    else:
+                        print("Partita Rinviata", day - (len(camp.teams) * 3 - 3))
+                else:
+                    if day <= len(camp.teams) * 2 - 2:
+                        print("Day", day)
+                    else:
+                        print("Partita Rinviata", day - (len(camp.teams) * 2 - 2))
+                for match in camp[day]:
+                    print("match", match, "Dati Partita: ", camp[day][match])
+        except Exception as e:
+            print(bcolors.BOLD + bcolors.UNDERLINE + bcolors.FAIL + text + bcolors.FAIL + " non è nel nostro database...")
+            print("Ricontrolla il codice del campionato inserito" + bcolors.ENDC)
 
 def caricamentoDatabase():
     text = "Caricamento"
