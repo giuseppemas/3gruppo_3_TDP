@@ -177,11 +177,12 @@ def inputCheck(userChoice ,data):
 
     if userChoice == '6':
         print(bcolors.OKBLUE + bcolors.BOLD + "Hai scelto l'opzione 6: ")
-        print("Dati una giornata e un intero k, stampare le k squadre tra tutti i campionati che hanno segnato più goal."
+        print("Dati una giornata e un intero k, stampare le k squadre tra tutti i campionati che hanno segnato più goal.\n"
               + bcolors.ENDC)
+        text2 = int(input(bcolors.OKBLUE + bcolors.BOLD + "Inserisci Giornata: " + bcolors.ENDC))
         text = int(input(bcolors.OKBLUE+bcolors.BOLD+"\nInserisci Un intero k : "+ bcolors.ENDC))
         try:
-            result = data.getTeamMoreGoal(text)
+            result = data.getTeamMoreGoal(text, text2)
             for elem in result:
                 print(elem[0], elem[3])
         except Exception as e:
@@ -190,11 +191,13 @@ def inputCheck(userChoice ,data):
 
     if userChoice == '7':
         print(bcolors.OKBLUE + bcolors.BOLD + "Hai scelto l'opzione 7: ")
-        print("Dati una giornata e un intero k, stampare le k squadre tra tutti i campionati che hanno subito meno goal."
+        print("Dati una giornata e un intero k, stampare le k squadre tra tutti i campionati che hanno subito meno goal.\n"
             + bcolors.ENDC)
+        text2 = int(input(bcolors.OKBLUE + bcolors.BOLD + "Inserisci Giornata: " + bcolors.ENDC))
         text = int(input(bcolors.OKBLUE+bcolors.BOLD+"\nInserisci Un intero k : "+ bcolors.ENDC))
+
         try:
-            result = data.getTeamLessGoal(text)
+            result = data.getTeamLessGoal(text, text2)
             for elem in result:
                 print(elem[0], elem[4])
         except Exception as e:
@@ -204,10 +207,12 @@ def inputCheck(userChoice ,data):
     if userChoice == '8':
         print(bcolors.OKBLUE + bcolors.BOLD + "Hai scelto l'opzione 8: ")
         print("Dati una giornata e un intero k, stampare le k squadre tra tutti i campionati con la migliore differenza"
-              "reti." + bcolors.ENDC)
-        text = int(input(bcolors.OKBLUE+bcolors.BOLD+"\nInserisci Un intero k : "+ bcolors.ENDC))
+              "reti.\n" + bcolors.ENDC)
+
+        text2 = int(input(bcolors.OKBLUE + bcolors.BOLD + "Inserisci Giornata: " + bcolors.ENDC))
+        text = int(input(bcolors.OKBLUE + bcolors.BOLD + "\nInserisci Un intero k : " + bcolors.ENDC))
         try:
-            result = data.getTeamDiffGoal(text)
+            result = data.getTeamDiffGoal(text,text2)
             for elem in result:
                 print(elem[0], elem[5])
         except Exception as e:

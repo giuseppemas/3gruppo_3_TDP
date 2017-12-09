@@ -37,43 +37,58 @@ class DataList(MapBase):
             if k._key == key:
                 del k
 
-    def getTeamLessGoal(self, k):
+    def getTeamLessGoal(self, k , day):
         rank = []
         result = []
         for item in self._listChampionships:
-            if item._key == "SC0":
-                day = 38
+            if item._key=="SC0":
+                if 38 < day:
+                    checkday = 38
+                else:
+                    checkday = day
+            elif len(item._value.teams)*2-2 < day:
+                checkday = len(item._value.teams)*2-2
             else:
-                day = len(item._value.teams) * 2 - 2
-            rank += item._value.get_rankingday(day, 4)
+                checkday=day
+            rank += item._value.get_rankingday(checkday, 4)
         rank = self._sortRank(rank, 0, len(rank) - 1, 4)
         for j in range(k):
             result += [rank[j]]
         return result
 
-    def getTeamMoreGoal(self, k):
+    def getTeamMoreGoal(self, k, day):
         rank = []
         result = []
         for item in self._listChampionships:
-            if item._key == "SC0":
-                day = 38
+            if item._key=="SC0":
+                if 38 < day:
+                    checkday = 38
+                else:
+                    checkday = day
+            elif len(item._value.teams)*2-2 < day:
+                checkday = len(item._value.teams)*2-2
             else:
-                day=len(item._value.teams)*2-2
-            rank += item._value.get_rankingday(day, 3)
+                checkday=day
+            rank += item._value.get_rankingday(checkday, 3)
         rank = self._sortRank(rank, 0, len(rank)-1, 3)
         for j in range(k):
             result += [rank[j]]
         return result
 
-    def getTeamDiffGoal(self, k):
+    def getTeamDiffGoal(self, k, day):
         rank = []
         result = []
         for item in self._listChampionships:
-            if item._key == "SC0":
-                day = 38
+            if item._key=="SC0":
+                if 38 < day:
+                    checkday = 38
+                else:
+                    checkday = day
+            elif len(item._value.teams)*2-2 < day:
+                checkday = len(item._value.teams)*2-2
             else:
-                day = len(item._value.teams) * 2 - 2
-            rank += item._value.get_rankingday(day, 5)
+                checkday=day
+            rank += item._value.get_rankingday(checkday, 5)
         rank = self._sortRank(rank, 0, len(rank) - 1, 5)
         for j in range(k):
             result += [rank[j]]
