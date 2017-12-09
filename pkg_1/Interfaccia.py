@@ -47,7 +47,7 @@ def inputCheck(userChoice ,data):
         text = text.upper()
         try:
             camp = data[text]
-            print("Numero Squadre", len(camp.teams))
+            print("Numero Squadre: ", len(camp.teams))
             print(camp.teams)
         except Exception as e:
             print(bcolors.BOLD + bcolors.UNDERLINE + bcolors.FAIL + text + bcolors.FAIL + " non è nel nostro database...")
@@ -56,35 +56,57 @@ def inputCheck(userChoice ,data):
     if userChoice == '2':
         text = str(input(bcolors.OKBLUE+bcolors.BOLD+"\nInserisci Codice Campionato: "+ bcolors.ENDC))
         text = text.upper()
-        text2 = int(input(bcolors.OKBLUE+bcolors.BOLD+"Inserisci Giornata: "+ bcolors.ENDC))
         try:
             camp = data[text]
-            print("Classifica")
-            print("Teams | PG | Pti ")
-            rank = camp.get_rankingday(text2,2)
-            i=0
-            for team in rank:
-                i+=1
-                print(i, team[0], team[1], team[2])
+            print("Numero Squadre: ", len(camp.teams))
+            print("Numero giornate: ", len(camp.teams)*2 - 2)
         except Exception as e:
             print(bcolors.BOLD + bcolors.UNDERLINE + bcolors.FAIL + text + bcolors.FAIL + " non è nel nostro database...")
             print("Ricontrolla il codice del campionato inserito" + bcolors.ENDC)
+        try:
+            text2 = int(input(bcolors.OKBLUE + bcolors.BOLD + "Inserisci Giornata: " + bcolors.ENDC))
+            if text2 <= (len(camp.teams)*2 - 2):
+                print("Classifica")
+                print("Teams | PG | Pti ")
+                rank = camp.get_rankingday(text2, 2)
+                i = 0
+                for team in rank:
+                    i += 1
+                    print(i, team[0], team[1], team[2])
+            else:
+                raise Exception()
+        except Exception as ex:
+            print(bcolors.FAIL + "La giornata " + bcolors.BOLD + bcolors.UNDERLINE + bcolors.FAIL + str(
+                text2) + bcolors.FAIL + " non appartiene al campionato "
+                  + bcolors.FAIL + text + bcolors.FAIL)
+            print("Ricontrolla il numero delle giornate prima di riprovare." + bcolors.ENDC)
 
     if userChoice == '3':
         text = str(input(bcolors.OKBLUE+bcolors.BOLD+"\nInserisci Codice Campionato: "+ bcolors.ENDC))
         text = text.upper()
-        text2 = int(input(bcolors.OKBLUE+bcolors.BOLD+"Inserisci Giornata: "+ bcolors.ENDC))
         try:
             camp = data[text]
-            print("Classifica basata sui risultati del primo tempo")
-            print("Teams | PG | Pti ")
-            i=0
-            for team in camp.get_partialrankingday(text2):
-                i+=1
-                print(i, team[0], team[1], team[2])
+            print("Numero Squadre: ", len(camp.teams))
+            print("Numero giornate: ", len(camp.teams) * 2 - 2)
         except Exception as e:
             print(bcolors.BOLD + bcolors.UNDERLINE + bcolors.FAIL + text + bcolors.FAIL + " non è nel nostro database...")
             print("Ricontrolla il codice del campionato inserito" + bcolors.ENDC)
+        try:
+            text2 = int(input(bcolors.OKBLUE + bcolors.BOLD + "Inserisci Giornata: " + bcolors.ENDC))
+            if text2 <= (len(camp.teams) * 2 - 2):
+                print("Classifica basata sui risultati del primo tempo")
+                print("Teams | PG | Pti ")
+                i = 0
+                for team in camp.get_partialrankingday(text2):
+                    i += 1
+                    print(i, team[0], team[1], team[2])
+            else:
+                raise Exception()
+        except Exception as e:
+            print(bcolors.FAIL + "La giornata " + bcolors.BOLD + bcolors.UNDERLINE + bcolors.FAIL + str(
+                text2) + bcolors.FAIL + " non appartiene al campionato "
+                  + bcolors.FAIL + text + bcolors.FAIL)
+            print("Ricontrolla il numero delle giornate prima di riprovare." + bcolors.ENDC)
 
     if userChoice == '4':
         text = str(input(bcolors.OKBLUE+bcolors.BOLD+"\nInserisci Codice Campionato: "+ bcolors.ENDC))
@@ -162,6 +184,7 @@ def inputCheck(userChoice ,data):
     if userChoice == '10':
         print(bcolors.OKBLUE+bcolors.BOLD+"\nTi ringraziamo per aver usufruito del nostro servizio.\nTorna a trovarci.\n" + bcolors.ENDC)
         exit()
+
     if userChoice == 'debug':
         try:
             text = str(input(bcolors.OKBLUE + bcolors.BOLD + "\nInserisci Codice Campionato: " + bcolors.ENDC))
