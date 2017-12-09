@@ -24,7 +24,8 @@ def menuChoice(data):
         print(bcolors.FAIL+bcolors.BOLD+'Siamo spiacenti, questa operazione non è tra quelle elencate... La preghiamo di riprovare.'+bcolors.ENDC)
         print("\nOperazioni disponibili: ")
         print("1) Dato un campionato, stampare l’elenco delle squadre del campionato.\n"
-              "2) Dati una giornata e un campionato, stampare la classifica per la giornata indicata e per ogni squadra il numero di partite giocate.\n"
+              "2) Dati una giornata e un campionato, stampare la classifica per la giornata indicata e per ogni squadra"
+                " il numero di partite giocate.\n"
               "3) Dati una giornata e un campionato, stampare la classifica per la giornata indicata considerando i risultati"
               " che si riferiscono al primo tempo e per ogni squadra il numero di partite giocate.\n"
               "4) Date una giornata e una squadra, stampare gli ultimi cinque risultati per la squadra indicata.\n"
@@ -41,8 +42,10 @@ def menuChoice(data):
 
 
 def inputCheck(userChoice ,data):
-    print("Campionati: E0, SC0, D1, SP1, I1, F1, N1, B1, P1, T1, G1")
     if userChoice == '1':
+        print(bcolors.OKBLUE+bcolors.BOLD+"Hai scelto l'opzione 1: ")
+        print("Dato un campionato, stampare l’elenco delle squadre del campionato."+ bcolors.ENDC)
+        print("Campionati: E0, SC0, D1, SP1, I1, F1, N1, B1, P1, T1, G1")
         text = str(input(bcolors.OKBLUE+bcolors.BOLD+"\nInserisci Codice Campionato: "+ bcolors.ENDC))
         text = text.upper()
         try:
@@ -54,6 +57,10 @@ def inputCheck(userChoice ,data):
             print("Ricontrolla il codice del campionato inserito" + bcolors.ENDC)
 
     if userChoice == '2':
+        print(bcolors.OKBLUE + bcolors.BOLD + "Hai scelto l'opzione 2: ")
+        print("Dati una giornata e un campionato, stampare la classifica per la giornata indicata e per ogni squadra il"
+                " numero di partite giocate." + bcolors.ENDC)
+        print("Campionati: E0, SC0, D1, SP1, I1, F1, N1, B1, P1, T1, G1")
         text = str(input(bcolors.OKBLUE + bcolors.BOLD + "\nInserisci Codice Campionato: " + bcolors.ENDC))
         text = text.upper()
         try:
@@ -85,6 +92,10 @@ def inputCheck(userChoice ,data):
             print("Ricontrolla il numero delle giornate prima di riprovare." + bcolors.ENDC)
 
     if userChoice == '3':
+        print(bcolors.OKBLUE + bcolors.BOLD + "Hai scelto l'opzione 3: ")
+        print("Dati una giornata e un campionato, stampare la classifica per la giornata indicata considerando i risultati"
+              " che si riferiscono al primo tempo e per ogni squadra il numero di partite giocate." + bcolors.ENDC)
+        print("Campionati: E0, SC0, D1, SP1, I1, F1, N1, B1, P1, T1, G1")
         text = str(input(bcolors.OKBLUE+bcolors.BOLD+"\nInserisci Codice Campionato: "+ bcolors.ENDC))
         text = text.upper()
         try:
@@ -114,6 +125,10 @@ def inputCheck(userChoice ,data):
             print("Ricontrolla il numero delle giornate prima di riprovare." + bcolors.ENDC)
 
     if userChoice == '4':
+        print(bcolors.OKBLUE + bcolors.BOLD + "Hai scelto l'opzione 4: ")
+        print("Date una giornata e una squadra, stampare gli ultimi cinque risultati per la squadra indicata."
+              + bcolors.ENDC)
+        print("Campionati: E0, SC0, D1, SP1, I1, F1, N1, B1, P1, T1, G1")
         text = str(input(bcolors.OKBLUE+bcolors.BOLD+"\nInserisci Codice Campionato: "+ bcolors.ENDC))
         text = text.upper()
         text2 = int(input(bcolors.OKBLUE+bcolors.BOLD+"Inserisci Giornata: "+ bcolors.ENDC))
@@ -135,7 +150,11 @@ def inputCheck(userChoice ,data):
             print(e, e.with_traceback(tb=None))
             print(bcolors.BOLD + bcolors.UNDERLINE + bcolors.FAIL + text + bcolors.FAIL + " non è nel nostro database...")
             print("Ricontrolla il codice del campionato inserito" + bcolors.ENDC)
+
     if userChoice == '5':
+        print(bcolors.OKBLUE + bcolors.BOLD + "Hai scelto l'opzione 5: ")
+        print("Dato un giorno, stampare i risultati di tutte le eventuali partite giocate il giorno indicato."
+              + bcolors.ENDC)
         try:
             date = input(bcolors.OKBLUE+"Inserisci Data yyyy-mm-dd: "+ bcolors.ENDC)
             matches = []
@@ -157,6 +176,9 @@ def inputCheck(userChoice ,data):
             print("Ricontrolla la data inserita" + bcolors.ENDC)
 
     if userChoice == '6':
+        print(bcolors.OKBLUE + bcolors.BOLD + "Hai scelto l'opzione 6: ")
+        print("Dati una giornata e un intero k, stampare le k squadre tra tutti i campionati che hanno segnato più goal."
+              + bcolors.ENDC)
         text = int(input(bcolors.OKBLUE+bcolors.BOLD+"\nInserisci Un intero k : "+ bcolors.ENDC))
         try:
             result = data.getTeamMoreGoal(text)
@@ -167,6 +189,9 @@ def inputCheck(userChoice ,data):
             print(bcolors.BOLD + bcolors.FAIL + "Ops... Qualcosa è andato storto"+ bcolors.ENDC)
 
     if userChoice == '7':
+        print(bcolors.OKBLUE + bcolors.BOLD + "Hai scelto l'opzione 7: ")
+        print("Dati una giornata e un intero k, stampare le k squadre tra tutti i campionati che hanno subito meno goal."
+            + bcolors.ENDC)
         text = int(input(bcolors.OKBLUE+bcolors.BOLD+"\nInserisci Un intero k : "+ bcolors.ENDC))
         try:
             result = data.getTeamLessGoal(text)
@@ -177,6 +202,9 @@ def inputCheck(userChoice ,data):
             print(bcolors.BOLD + bcolors.FAIL + "Ops... Qualcosa è andato storto"+ bcolors.ENDC)
 
     if userChoice == '8':
+        print(bcolors.OKBLUE + bcolors.BOLD + "Hai scelto l'opzione 8: ")
+        print("Dati una giornata e un intero k, stampare le k squadre tra tutti i campionati con la migliore differenza"
+              "reti." + bcolors.ENDC)
         text = int(input(bcolors.OKBLUE+bcolors.BOLD+"\nInserisci Un intero k : "+ bcolors.ENDC))
         try:
             result = data.getTeamDiffGoal(text)
@@ -187,6 +215,10 @@ def inputCheck(userChoice ,data):
             print(bcolors.BOLD + bcolors.FAIL + "Ops... Qualcosa è andato storto"+ bcolors.ENDC)
 
     if userChoice == '9':
+        print(bcolors.OKBLUE + bcolors.BOLD + "Hai scelto l'opzione 9: ")
+        print("Dati una giornata e un campionato, stampare la squadra tra tutti i campionati con il maggior numero di"
+              "vittorie, la squadra con il maggior numero di vittorie in casa, la squadra con il maggior numero di vittorie in"
+              "trasferta." + bcolors.ENDC)
         try:
             TeamWin, TeamHomeWin, TeamAwayWin = data.getTeamWins()
             print("Team: ", TeamWin[0], "- Numero Vittorie: ", TeamWin[6])
@@ -202,6 +234,8 @@ def inputCheck(userChoice ,data):
         exit()
 
     if userChoice == 'debug':
+        print(bcolors.OKBLUE + bcolors.BOLD + "Hai scelto l'opzione 'debug'." + bcolors.ENDC)
+        print("Campionati: E0, SC0, D1, SP1, I1, F1, N1, B1, P1, T1, G1")
         try:
             text = str(input(bcolors.OKBLUE + bcolors.BOLD + "\nInserisci Codice Campionato: " + bcolors.ENDC))
             text = text.upper()
