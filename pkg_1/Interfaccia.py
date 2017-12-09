@@ -175,7 +175,6 @@ def inputCheck(userChoice ,data):
         try:
             date = input(bcolors.OKBLUE+"Inserisci Data yyyy-mm-dd: "+ bcolors.ENDC)
             matches = []
-            #TO FIX
             for elem in data:
                 camp = data[elem._key]
                 temp = camp.getMatches(date)
@@ -184,10 +183,11 @@ def inputCheck(userChoice ,data):
             if len(matches) is 0:
                 print(bcolors.BOLD+bcolors.WARNING+"Nessuna partita giocata in questa data"+bcolors.ENDC)
             else:
+                print("Data | Home Team - Away Team | FTHG | FTAG | FTR")
                 for elem in matches:
-                    print(elem)
+                    print(elem[0], elem[1] +" - "+ elem[2], elem[3], elem[4], elem[5])
         except TypeError as e:
-            print(e, e.with_traceback(sys.exc_info()), bcolors.FAIL+"The insert date is not correct"+bcolors.ENDC)
+            print(e, e.with_traceback(sys.exc_info()), bcolors.FAIL+"La data inserita non è corretta."+bcolors.ENDC)
         except Exception:
             print(bcolors.BOLD + bcolors.UNDERLINE + bcolors.FAIL + "Ops.. Qualcosa è andato storto...")
             print("Ricontrolla la data inserita" + bcolors.ENDC)
@@ -327,7 +327,7 @@ class MyThread(threading.Thread):
         threadingLock.release()
 
 ### INTERFACCIA ###
-print("*** Benvenuto nel nostro Centro Scommesse ***\n")
+print(bcolors.OKBLUE + bcolors.BOLD +"*** Benvenuto nel nostro Centro Scommesse ***\n"+ bcolors.ENDC)
 print("Operazioni disponibili: ")
 print("1) Dato un campionato, stampare l’elenco delle squadre del campionato.\n"
       "2) Dati una giornata e un campionato, stampare la classifica per la giornata indicata e per ogni squadra il"
