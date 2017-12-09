@@ -223,9 +223,16 @@ def inputCheck(userChoice ,data):
         print(bcolors.OKBLUE + bcolors.BOLD + "Hai scelto l'opzione 9: ")
         print("Dati una giornata e un campionato, stampare la squadra con il maggior numero di"
               "vittorie, la squadra con il maggior numero di vittorie in casa, la squadra con il maggior numero di vittorie in"
-              "trasferta." + bcolors.ENDC)
+              "trasferta.\n" + bcolors.ENDC)
+
+        print("Campionati: E0, SC0, D1, SP1, I1, F1, N1, B1, P1, T1, G1")
+        text = str(input(bcolors.OKBLUE + bcolors.BOLD + "\nInserisci Codice Campionato: " + bcolors.ENDC))
+        text = text.upper()
+        text2 = int(input(bcolors.OKBLUE + bcolors.BOLD + "Inserisci Giornata: " + bcolors.ENDC))
+
         try:
-            TeamWin, TeamHomeWin, TeamAwayWin = data.getTeamWins()
+            camp = data[text]
+            TeamWin, TeamHomeWin, TeamAwayWin = camp.getTeamWins(text2)
             print("Team: ", TeamWin[0], "- Numero Vittorie: ", TeamWin[6])
             print("Team: ", TeamHomeWin[0], "- Numero Vittorie Casa: ", TeamHomeWin[7])
             print("Team: ", TeamAwayWin[0], "- Numero Vittorie Trasferta: ", TeamAwayWin[8])

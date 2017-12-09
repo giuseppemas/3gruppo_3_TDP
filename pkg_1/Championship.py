@@ -515,6 +515,12 @@ class Championship(SortedTableMap):
             else:
                 return matches
 
+    def getTeamWins(self, day):
+        win=self.get_rankingday(day, 6)[0]
+        homewin=self.get_rankingday(day,7)[0]
+        awaywin = self.get_rankingday(day,8)[0]
+        return win,homewin,awaywin
+
     def _read_sheet(self):
         for i in range(self.sheet.nrows - 1):
             i += 1
