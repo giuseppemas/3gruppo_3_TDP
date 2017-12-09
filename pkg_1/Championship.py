@@ -255,6 +255,7 @@ class Championship(SortedTableMap):
         return self[day]._ranking
 
     def get_partialrankingday(self,day):
+        self._sortRank(day, 0, len(self[day]._partialrank)-1,2) #Fix sort for partial rank actually it doesn't work
         return self[day]._partialrank
 
     def get_historyTeam(self, day, team):

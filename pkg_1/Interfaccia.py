@@ -60,12 +60,12 @@ def inputCheck(userChoice ,data):
         try:
             camp = data[text]
             print("Classifica")
-            print("Teams | PG | Pti | GF | GS | DR")
+            print("Teams | PG | Pti ")
             rank = camp.get_rankingday(text2,2)
             i=0
             for team in rank:
                 i+=1
-                print(i, team)
+                print(i, team[0], team[1], team[2])
         except Exception as e:
             print(bcolors.BOLD + bcolors.UNDERLINE + bcolors.FAIL + text + bcolors.FAIL + " non è nel nostro database...")
             print("Ricontrolla il codice del campionato inserito" + bcolors.ENDC)
@@ -77,9 +77,11 @@ def inputCheck(userChoice ,data):
         try:
             camp = data[text]
             print("Classifica basata sui risultati del primo tempo")
-            print("Teams | PG | Pti | GF | GS | DR")
-            for team in camp[text2]._partialrank:
-                print(team)
+            print("Teams | PG | Pti ")
+            i=0
+            for team in camp.get_partialrankingday(text2):
+                i+=1
+                print(i, team[0], team[1], team[2])
         except Exception as e:
             print(bcolors.BOLD + bcolors.UNDERLINE + bcolors.FAIL + text + bcolors.FAIL + " non è nel nostro database...")
             print("Ricontrolla il codice del campionato inserito" + bcolors.ENDC)
@@ -156,7 +158,7 @@ def inputCheck(userChoice ,data):
         except Exception as e:
             print(e)
             print(bcolors.BOLD + bcolors.FAIL + "Ops... Qualcosa è andato storto"+ bcolors.ENDC)
-            
+
     if userChoice == '10':
         print(bcolors.OKBLUE+bcolors.BOLD+"\nTi ringraziamo per aver usufruito del nostro servizio.\nTorna a trovarci.\n" + bcolors.ENDC)
         exit()
