@@ -21,37 +21,26 @@ def find_kmp(T,P):
 
     n,m = len(T), len(P)
     count = 0
-    confronti = 0
     if m == 0: return n+1
     fail = compute_kmp_fail(P)
     j = 0
     k = 0
     while j < n:
+
         if T[j] == P[k]:
-            confronti += 1
             if k == m - 1:
                 count += 1
-                k = -1
+                j +=1
+                k = 0
                 #return j - m + 1
-            j += 1
-            k += 1
+            else:
+                j += 1
+                k += 1
         elif k > 0:
             k = fail[k - 1]
         else:
             j += 1
-    print("Numero di confronti: ", confronti)
-    return count
 
-def find_brute(T,P):
-
-    n, m = len(T), len(P)
-    count = 0
-    for i in range(n-m+1):
-        k = 0
-        while k < m and T[i+k] == P[k]:
-            k += 1
-        if k == m:
-            count += 1
     return count
 
 print("Efficienza della soluzione proposta (count_ kmp):\n")
@@ -110,34 +99,169 @@ T1 = "In un mondo sempre più orientato all’innovazione ed in un sistema che "
     "botnet durante un attacco DDoS, in modo da bloccare gli utenti malevoli e" \
     "permettere agli utenti reali di poter accedere ai servizi offerti."
 
-T = "bacaabaccabacbaabb"
-P = "abacab"
+P1 = "Nasce quindi il problema di identificare correttamente la"
+P2 = "poter accedere ai servizi"
+P3 = "DDoS"
+P7 = "No-Presente"
 
-N = 1
+T2 = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaab"
+P4 = "aaaaaaaaaaaaaaab"
+P5 = "b"
 
-inizio = time.clock()
+
+N = 1000 # numero su cui si media il tempo della singola esecuzione
+print("Testo lungo, pattern lungo:")
+Stringa = T1
+Pattern = P1
+tot = 0
 for i in range(N):
-    value = T.count(P)
-fine = time.clock()
-tempo_count = (fine - inizio)
+    inizio = time.clock()
+    value = Stringa.count(Pattern)
+    fine = time.clock()
+    tempo_count = (fine - inizio)
+    tot += tempo_count
+tempo_count = tot/N;
 print("Tempo impiegato da count: ",tempo_count, "secondi,   Output: ", value)
 
-inizio = time.clock()
+tot = 0
 for i in range(N):
-    value = find_kmp(T,P)
-fine = time.clock()
-tempo_count_kmp = (fine - inizio)
+    inizio = time.clock()
+    value = find_kmp(Stringa,Pattern)
+    fine = time.clock()
+    tempo_count_kmp = (fine - inizio)
+    tot += tempo_count_kmp
+tempo_count_kmp = tot/N;
 print("Tempo impiegato da find_kmp: ",tempo_count_kmp, "secondi,   Output: ", value)
 
-inizio = time.clock()
+print("Rapporto delle prestazioni con Count di str: ")
+print("count: ", tempo_count_kmp/tempo_count*100, "% \ncount_kmp: ", tempo_count_kmp/tempo_count_kmp*100, "% \n")
+
+print("Testo lungo, pattern medio:")
+Stringa = T1
+Pattern = P2
+tot = 0
 for i in range(N):
-    value = find_brute(T,P)
-fine = time.clock()
-tempo_brute = (fine - inizio)
-print("Tempo impiegato da find_brute: ",tempo_brute, "secondi,   Output: ", value)
+    inizio = time.clock()
+    value = Stringa.count(Pattern)
+    fine = time.clock()
+    tempo_count = (fine - inizio)
+    tot += tempo_count
+tempo_count = tot/N;
+print("Tempo impiegato da count: ",tempo_count, "secondi,   Output: ", value)
 
-print("\nRapporto delle prestazioni con Count di str:\n ")
-print("Count: ", tempo_brute/tempo_count*100, "% \nfind_kmp: ", tempo_brute/tempo_count_kmp*100, "% \nfind_brute: ", tempo_brute/tempo_brute*100, " %\n")
+tot = 0
+for i in range(N):
+    inizio = time.clock()
+    value = find_kmp(Stringa,Pattern)
+    fine = time.clock()
+    tempo_count_kmp = (fine - inizio)
+    tot += tempo_count_kmp
+tempo_count_kmp = tot/N;
+print("Tempo impiegato da find_kmp: ",tempo_count_kmp, "secondi,   Output: ", value)
 
-print("\nRapporto delle prestazioni fra Knuth-Morris-Pratt e Brute Force:\n ")
-print("find_kmp: ", tempo_brute/tempo_count_kmp*100, "% \nfind_brute: ", tempo_brute/tempo_brute*100, " %")
+print("Rapporto delle prestazioni con Count di str: ")
+print("count: ", tempo_count_kmp/tempo_count*100, "% \ncount_kmp: ", tempo_count_kmp/tempo_count_kmp*100, "% \n")
+
+print("Testo lungo, pattern corto:")
+Stringa = T1
+Pattern = P3
+tot = 0
+for i in range(N):
+    inizio = time.clock()
+    value = Stringa.count(Pattern)
+    fine = time.clock()
+    tempo_count = (fine - inizio)
+    tot += tempo_count
+tempo_count = tot/N;
+print("Tempo impiegato da count: ",tempo_count, "secondi,   Output: ", value)
+
+tot = 0
+for i in range(N):
+    inizio = time.clock()
+    value = find_kmp(Stringa,Pattern)
+    fine = time.clock()
+    tempo_count_kmp = (fine - inizio)
+    tot += tempo_count_kmp
+tempo_count_kmp = tot/N;
+print("Tempo impiegato da find_kmp: ",tempo_count_kmp, "secondi,   Output: ", value)
+
+print("Rapporto delle prestazioni con Count di str: ")
+print("count: ", tempo_count_kmp/tempo_count*100, "% \ncount_kmp: ", tempo_count_kmp/tempo_count_kmp*100, "% \n")
+
+print("Testo lungo, pattern non presente:")
+Stringa = T1
+Pattern = P7
+tot = 0
+for i in range(N):
+    inizio = time.clock()
+    value = Stringa.count(Pattern)
+    fine = time.clock()
+    tempo_count = (fine - inizio)
+    tot += tempo_count
+tempo_count = tot/N;
+print("Tempo impiegato da count: ",tempo_count, "secondi,   Output: ", value)
+
+tot = 0
+for i in range(N):
+    inizio = time.clock()
+    value = find_kmp(Stringa,Pattern)
+    fine = time.clock()
+    tempo_count_kmp = (fine - inizio)
+    tot += tempo_count_kmp
+tempo_count_kmp = tot/N;
+print("Tempo impiegato da find_kmp: ",tempo_count_kmp, "secondi,   Output: ", value)
+
+print("Rapporto delle prestazioni con Count di str: ")
+print("count: ", tempo_count_kmp/tempo_count*100, "% \ncount_kmp: ", tempo_count_kmp/tempo_count_kmp*100, "% \n")
+
+print("Testo tutte a con b finale, pattern qualche a con b:")
+Stringa = T2
+Pattern = P4
+tot = 0
+for i in range(N):
+    inizio = time.clock()
+    value = Stringa.count(Pattern)
+    fine = time.clock()
+    tempo_count = (fine - inizio)
+    tot += tempo_count
+tempo_count = tot/N;
+print("Tempo impiegato da count: ",tempo_count, "secondi,   Output: ", value)
+
+tot = 0
+for i in range(N):
+    inizio = time.clock()
+    value = find_kmp(Stringa,Pattern)
+    fine = time.clock()
+    tempo_count_kmp = (fine - inizio)
+    tot += tempo_count_kmp
+tempo_count_kmp = tot/N;
+print("Tempo impiegato da find_kmp: ",tempo_count_kmp, "secondi,   Output: ", value)
+
+print("Rapporto delle prestazioni con Count di str: ")
+print("count: ", tempo_count_kmp/tempo_count*100, "% \ncount_kmp: ", tempo_count_kmp/tempo_count_kmp*100, "% \n")
+
+print("Testo tutte a con b finale, pattern solo b:")
+Stringa = T2
+Pattern = P5
+tot = 0
+for i in range(N):
+    inizio = time.clock()
+    value = Stringa.count(Pattern)
+    fine = time.clock()
+    tempo_count = (fine - inizio)
+    tot += tempo_count
+tempo_count = tot/N;
+print("Tempo impiegato da count: ",tempo_count, "secondi,   Output: ", value)
+
+tot = 0
+for i in range(N):
+    inizio = time.clock()
+    value = find_kmp(Stringa,Pattern)
+    fine = time.clock()
+    tempo_count_kmp = (fine - inizio)
+    tot += tempo_count_kmp
+tempo_count_kmp = tot/N;
+print("Tempo impiegato da find_kmp: ",tempo_count_kmp, "secondi,   Output: ", value)
+
+print("Rapporto delle prestazioni con Count di str: ")
+print("count: ", tempo_count_kmp/tempo_count*100, "% \ncount_kmp: ", tempo_count_kmp/tempo_count_kmp*100, "% \n")
