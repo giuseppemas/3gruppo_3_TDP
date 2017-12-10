@@ -1,4 +1,4 @@
-import xlrd
+import pkg_1.xlrd as xlrd
 import datetime
 class Book:
 
