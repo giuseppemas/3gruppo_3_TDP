@@ -360,7 +360,7 @@ class Championship(SortedTableMap):
                         history += 'D'
                     elif self[days][match][5] == 'A':
                         history += 'W'
-        if len(history) is not 5:
+        if len(history) < 5:
             end2=5-len(history)
             for days in range(end,end-end2 ,-1):
                 for match in self[days]:
