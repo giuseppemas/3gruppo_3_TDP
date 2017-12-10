@@ -52,7 +52,7 @@ class DataList(MapBase):
                 checkday = len(item._value.teams)*2-2
             else:
                 checkday=day
-            rank += item._value.get_rankingday(checkday, 4)
+            rank += item._value[checkday]._ranking
         rank = self._sortRank(rank, 0, len(rank) - 1, 4)
         for j in range(k):
             result += [rank[j]]
@@ -72,7 +72,7 @@ class DataList(MapBase):
                 checkday = len(item._value.teams)*2-2
             else:
                 checkday=day
-            rank += item._value.get_rankingday(checkday, 3)
+            rank += item._value[checkday]._ranking
         rank = self._sortRank(rank, 0, len(rank)-1, 3)
         for j in range(k):
             result += [rank[j]]
@@ -92,7 +92,7 @@ class DataList(MapBase):
                 checkday = len(item._value.teams)*2-2
             else:
                 checkday=day
-            rank += item._value.get_rankingday(checkday, 5)
+            rank += item._value[checkday]._ranking
         rank = self._sortRank(rank, 0, len(rank) - 1, 5)
         for j in range(k):
             result += [rank[j]]
