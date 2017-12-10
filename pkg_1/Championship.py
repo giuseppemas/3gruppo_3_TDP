@@ -360,6 +360,24 @@ class Championship(SortedTableMap):
                         history += 'D'
                     elif self[days][match][5] == 'A':
                         history += 'W'
+        if len(history) is not 5:
+            end2=5-len(history)
+            for days in range(end,end-end2 ,-1):
+                for match in self[days]:
+                    if team == self[days][match][1]:
+                        if self[days][match][5] == 'H':
+                            history += 'W'
+                        elif self[days][match][5] == 'D':
+                            history += 'D'
+                        elif self[days][match][5] == 'A':
+                            history += 'A'
+                    elif team == self[days][match][2]:
+                        if self[days][match][5] == 'H':
+                            history += 'A'
+                        elif self[days][match][5] == 'D':
+                            history += 'D'
+                        elif self[days][match][5] == 'A':
+                            history += 'W'
         return history
 
     def _set_ranking(self, day, match, nextday):
