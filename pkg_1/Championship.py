@@ -227,6 +227,7 @@ class Championship(SortedTableMap):
                             self[days][n_match] = ()
                             temp = self.DayofSeason()
                             toCheck = False
+                            nextday=True
                         else:
                             temp=self.DayofSeason()
                             rec+=1
@@ -236,7 +237,7 @@ class Championship(SortedTableMap):
                                 self[rec][l] = self[days][l]
                                 temp[l]=self[days][l]
                             toCheck = True
-                            temp = self._checkBeforeDay(days, rec, temp)
+                            #temp = self._checkBeforeDay(days, rec, temp)
                         teams = 0
                         n_match = 1
                         lastdate = k[0]
@@ -255,8 +256,6 @@ class Championship(SortedTableMap):
             elif k[1]==8:
                 self[days][n_match] += [k[0]]
                 teams+=2
-                self._set_partialranking(days,n_match,nextday)
-                self._set_ranking(days,n_match, nextday)
                 if toCheck:
                     isMatched=self._checkDay(days,n_match, rec, temp)
                     if not isMatched and nextday and len(temp)>=len(self.teams)//4 :
@@ -270,16 +269,21 @@ class Championship(SortedTableMap):
                         self[days][n_match] = []
                         temp = self.DayofSeason()
                         #print("End", len(temp))
+                        nextday=True
                         toCheck = False
                     elif isMatched:
                         temp = self.DayofSeason()
                         toCheck = False
-
+                self._set_partialranking(days, n_match, nextday)
+                self._set_ranking(days, n_match, nextday)
+                if nextday:
+                    nextday, n_match = self._checkLastDay(days, n_match)
             else:
                 if type(k[0])!=type(""):
                     self[days][n_match] += [int(k[0])]
                 else:
                     self[days][n_match] += [k[0]]
+
 
     def _checkDay(self, days, n_match, rec, temp):
         """funzione che controlla se la giornata settata come recuperata è effettivamente una partita recuperata controllando se ogni
@@ -290,6 +294,16 @@ class Championship(SortedTableMap):
             else:
                 temp[len(temp)+1] = self[days][n_match]
                 return False
+
+    def _checkLastDay(self,  day, n_match):
+        if len(self[day - 1]) == len(self.teams) // 2:
+            return True,n_match
+        else:
+            for i in self[day - 1]:
+                if self[day][n_match][1] == self[day - 1][i][1] or self[day][n_match][1] == self[day - 1][i][2] or self[day][n_match][2] == self[day - 1][i][1] or self[day][n_match][2] == self[day - 1][i][2]:
+                    return True, n_match
+            self[day - 1][len(self[day - 1]) + 1] = self[day][1]
+            return False, n_match-1
 
     def _checkBeforeDay(self, day, rec, temp):
         """controlla se il match non è presente nella giornata precedetne e lo aggiunge a quella giornata"""
