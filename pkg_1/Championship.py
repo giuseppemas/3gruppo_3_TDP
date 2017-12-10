@@ -39,7 +39,7 @@ class DataList(MapBase):
                 del k
 
     def getTeamLessGoal(self, k , day):
-        """dato un giorno Restituisce le k squadre tra tutti i campionati che hanno subito meno goal"""
+        """data una giornata Restituisce le k squadre tra tutti i campionati che hanno subito meno goal"""
         rank = []
         result = []
         for item in self._listChampionships:
@@ -59,7 +59,7 @@ class DataList(MapBase):
         return result
 
     def getTeamMoreGoal(self, k, day):
-        """dato un giorno Restituisce le k squadre tra tutti i campionati che hanno segnato più goal"""
+        """data una giornata Restituisce le k squadre tra tutti i campionati che hanno segnato più goal"""
         rank = []
         result = []
         for item in self._listChampionships:
@@ -79,7 +79,7 @@ class DataList(MapBase):
         return result
 
     def getTeamDiffGoal(self, k, day):
-        """dato un giorno Restituisce le k squadre tra tutti i campionati che hanno la miogliore differenza reti"""
+        """data una giornata Restituisce le k squadre tra tutti i campionati che hanno la miogliore differenza reti"""
         rank = []
         result = []
         for item in self._listChampionships:
