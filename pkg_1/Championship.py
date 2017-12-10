@@ -12,6 +12,7 @@ class DataList(MapBase):
             self._setList()
 
     def _setList(self):
+        """lista di campionati Key: Codice campinato, Value: Championship"""
         names = ["E0","SC0","D1","SP1","I1","F1","N1","B1","P1","T1","G1"]
         for value in names:
             self._listChampionships.append(self._Item(value,Championship(value)))
@@ -38,6 +39,7 @@ class DataList(MapBase):
                 del k
 
     def getTeamLessGoal(self, k , day):
+        """dato un giorno Restituisce le k squadre tra tutti i campionati che hanno subito meno goal"""
         rank = []
         result = []
         for item in self._listChampionships:
@@ -57,6 +59,7 @@ class DataList(MapBase):
         return result
 
     def getTeamMoreGoal(self, k, day):
+        """dato un giorno Restituisce le k squadre tra tutti i campionati che hanno segnato più goal"""
         rank = []
         result = []
         for item in self._listChampionships:
@@ -76,6 +79,7 @@ class DataList(MapBase):
         return result
 
     def getTeamDiffGoal(self, k, day):
+        """dato un giorno Restituisce le k squadre tra tutti i campionati che hanno la miogliore differenza reti"""
         rank = []
         result = []
         for item in self._listChampionships:
@@ -95,6 +99,7 @@ class DataList(MapBase):
         return result
 
     def getTeamWins(self):
+        """NON UTILIZZATO restituisce chi ha vinto di più tra tutti i campionati"""
         i=0
         for item in self._listChampionships:
             if item._key == "SC0":
@@ -175,12 +180,16 @@ class Championship(SortedTableMap):
                 self._setTeam(k[0])
 
     def _setTeam(self, match):
+        """Utilizzata per aggiungere la squadra alla lista self.Teams contenente tutte le squadre presenti nel campionato"""
         self.teams.append(match)
 
     def _getTeams(self):
+        """Restituisce le squadre del campionato"""
         return self.teams
 
     def _set_day_season(self):
+        """Funzione utilizzata in fase di inizializzazione per settare la struttura dati divisa in giornate
+        ogni giornata contiene n match ogni match contiene le info relative alla partita"""
         teams = 0
         days = 1
         n_match = 0
@@ -272,7 +281,9 @@ class Championship(SortedTableMap):
                 else:
                     self[days][n_match] += [k[0]]
 
-    def _checkDay(self, days, n_match, rec, temp): #ToFIX SC0 Championship
+    def _checkDay(self, days, n_match, rec, temp):
+        """funzione che controlla se la giornata settata come recuperata è effettivamente una partita recuperata controllando se ogni
+        partita in giornata recuperata è presente nella giornata attuale"""
         for i in self[rec]:
             if self[rec][i][1]==self[days][n_match][1] or self[rec][i][1]==self[days][n_match][2] or self[rec][i][2]==self[days][n_match][1] or self[rec][i][2]==self[days][n_match][2]:
                 return True
@@ -281,6 +292,7 @@ class Championship(SortedTableMap):
                 return False
 
     def _checkBeforeDay(self, day, rec, temp):
+        """controlla se il match non è presente nella giornata precedetne e lo aggiunge a quella giornata"""
         if len(self[day-1]) == len(self.teams)//2:
             return temp
         else:
@@ -302,14 +314,18 @@ class Championship(SortedTableMap):
             return temp
 
     def get_rankingday(self,day, order):
+        """restituisce la classifica di quella giornata ordinata in base ad un valore definito da order
+        PS: la classifica è presente in ogni giornata di campionato e contienre partite giocate, punti, goal, vittorie"""
         self._sortRank(day, 0, len(self[day]._ranking)-1, order,False)
         return self[day]._ranking
 
     def get_partialrankingday(self,day):
+        "restituisce la classifica di quella giornata valutata sui risultati parziali ordinata in base al punteggio ottenuto"
         self._sortRank(day, 0, len(self[day]._partialrank)-1,2,True)
         return self[day]._partialrank
 
     def get_historyTeam(self, day, team):
+        """Data una giornata restituisce gli ultimi 5 risultati di quella squadra --- punto 4"""
         history = []
         end = day-5
         if end<0:
@@ -333,6 +349,8 @@ class Championship(SortedTableMap):
         return history
 
     def _set_ranking(self, day, match, nextday):
+        """Funzione utilizzata per settare la classifica,
+        contiene: Squadra, partite giocat, punti, goal fatti, goal subiti, diff-reti, vittorie , vittorie in casa, vittorie, in trasferta"""
         if day-1==0:
             if self[day][match][5]=='H':
                 self[day]._ranking.append([self[day][match][1], 1, 3, self[day][match][3], self[day][match][4], self[day][match][3]-self[day][match][4],1,1,0])
@@ -410,6 +428,7 @@ class Championship(SortedTableMap):
                     i += 1
 
     def _set_partialranking(self,day, match,nextday):
+        """Funzine utilizzata per settare la classifica basata su risultati parziali"""
         if day-1==0:
             if self[day][match][8]=='H':
                 self[day]._partialrank.append([self[day][match][1], 1, 3, self[day][match][6]])
@@ -469,6 +488,7 @@ class Championship(SortedTableMap):
                     i += 1
 
     def _partition(self, day , start, end, order, partial):
+        """Usato per ordinare la classifica"""
         pos = start
         if partial:
             for i in range(start, end):
@@ -497,6 +517,7 @@ class Championship(SortedTableMap):
         return pos
 
     def _sortRank(self, day, start, end, order,partial):
+        """usato per ordinare la classifica"""
         if start < end:
             pos = self._partition(day, start, end, order, partial)
             self._sortRank(day, start, pos - 1, order,partial)
@@ -504,6 +525,7 @@ class Championship(SortedTableMap):
 
 
     def getMatches(self, date):
+        """Punto-5, restituisce tutte le partite disputate in quel giorno"""
         date = date.split("-")
         if len(date) is not 3:
             raise TypeError
@@ -512,6 +534,7 @@ class Championship(SortedTableMap):
             return self._searchDay(date, 1, len(self))
 
     def _searchDay(self, date, start, end):
+        """utilizzato da getMatches, (RicercaBinaria) """
         matches = []
         if (start > end or start < 1 or end < 1):
             return -1
@@ -528,12 +551,15 @@ class Championship(SortedTableMap):
                 return matches
 
     def getTeamWins(self, day):
+        """Punto-9, restituisce la squadra che ha totalizzato più vittorie, la squadra che ha totalizzato più vittorie in casa,
+        e qualla con più vittorie in trasferta"""
         win=self.get_rankingday(day, 6)[0]
         homewin=self.get_rankingday(day,7)[0]
         awaywin = self.get_rankingday(day,8)[0]
         return win,homewin,awaywin
 
     def _read_sheet(self):
+        """generator utilizzato per leggere il fogolio excel"""
         for i in range(self.sheet.nrows - 1):
             i += 1
             j = 0
@@ -542,6 +568,7 @@ class Championship(SortedTableMap):
                 j += 1
 
     def _team_generator(self):
+        """generetor utilizzato per settare squadre campionato"""
         for i in range(self.sheet.nrows-1, 1, -1):
             j=0
             for values in self.sheet.row_values(rowx=i,start_colx=1,end_colx=4):
@@ -549,6 +576,7 @@ class Championship(SortedTableMap):
                 j+=1
 
     def _daysToDate(self, days):
+        """Funzione utilizzata per convertire data excel in datetime"""
         return datetime.date(1899, 12, 30) + datetime.timedelta(days)
 
 """

@@ -67,3 +67,15 @@ def _checkmatchpostponed(self, day, match):
                         self[i][k][9] = False
                 else:
                     return
+
+
+def _checkLastDay(self, day, n_match):
+    if len(self[day-1])== len(self.teams)//2:
+        return True,n_match
+    else:
+        for i in self[day-1]:
+            if self[day][1][1] == self[day-1][i][1] or self[day][1][1] == self[day-1][i][2] or self[day][1][2] == self[day-1][i][1] or self[day][1][2] == self[day-1][i][2]:
+                return True,n_match
+        self[day - 1][len(self[day - 1]) + 1] = self[day][1]
+
+        return False,n_match-1
