@@ -163,6 +163,7 @@ def inputCheck(userChoice ,data):
                 elif elem == 'D':
                     print(bcolors.ENDC + elem, end=" ")
         except Exception as ex:
+            print(ex)
             print(bcolors.FAIL + "La giornata " + bcolors.BOLD + bcolors.UNDERLINE + bcolors.FAIL + str(
                 text2) + bcolors.FAIL + " non appartiene al campionato "
                   + bcolors.FAIL + text + bcolors.FAIL)
